@@ -1,0 +1,30 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{1}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}\\
+                    &\multicolumn{1}{c}{Tuition bill (USD 1,000)}\\
+\hline
+1 Years Treated     &       1.927\sym{***}\\
+                    &     (0.493)         \\
+[1em]
+2 Years Treated     &       3.346\sym{***}\\
+                    &     (1.010)         \\
+[1em]
+3 Years Treated     &       5.583\sym{***}\\
+                    &     (1.373)         \\
+[1em]
+School FE           &         Yes         \\
+[1em]
+Graduation Year FE  &         Yes         \\
+\hline
+Observations (doctors)&      54,186         \\
+Clusters            &          54         \\
+$R^{2}$             &       0.977         \\
+$F$-test            &       7.880         \\
+Mean                &     131.334         \\
+\hline\hline
+\multicolumn{2}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{2}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+}
