@@ -21,19 +21,6 @@ Victoria Garcia
 
 clear all
 
-*** DIRECTORIES ***
-
-global proj_dropbox "C:\dropbox\Phil Research Dropbox\Victoria Garcia\Student Debt of Doctors"
-
-global working_data "$proj_dropbox\Tuition Data\simon\student-debt-of-doctors\data\working\temp\old-2025-10-20"
-
-global v_data "$proj_dropbox\Tuition Data\victoria-temp\data"
-	
-global code_repo "$proj_dropbox\Tuition Data\victoria-temp\code\do_files"
-	
-cd "$code_repo"
-
-
 *** DEFINE LARGE TUITION INCREASE ***
 
 global abs_large = 2 // absolute change of real tuition in thousands
@@ -44,7 +31,7 @@ global rel_large = 7 // relative change of real tuition in %
 *** Reviewing the Data ***
 * Check for Tuition Decreases *
 
-use "$working_data/aamc-tuition", clear
+use "$temp/aamc-tuition", clear
 g neg_delta_nominal = delta_nominal_tuition <= 0
 g neg_delta = delta_tuition <= 0
 

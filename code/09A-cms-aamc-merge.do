@@ -99,48 +99,4 @@ restore
 keep if _merge==3
 save "$v_data/cms_aamc_merge_identifier.dta", replace
 
-*** CREATE HCPCS VARIABLE ***
-
-preserve 
-keep if fg_sel5_total_payments != 0
-
-keep ///
- 	npi             ///
- 	year            ///
- 	dum*  ///
- 	tuition_bill    ///
- 	med_school     ///
- 	grad_year       ///
- 	phySpec         ///
- 	hrr             ///
- 	groupPAC        ///
- 	avg_mdcr_pymt_amt*
-	
-sum year
-local min = r(min)
-local max = r(max)
-
-forvalues n = `min'/`max' {	
- 	preserve
-	
- 	keep if year == `n'
-	
- 	reshape long avg_mdcr_pymt_amt, i(npi) j(hcpcs) string
-	
- 	tempfile reshape_`n'
- 	save  	`reshape_`n''
-	
- 	restore
-	
-}
-
-clear
-forvalues n = `min'/`max' {
- 	append using `reshape_`n''
-	
-}
-//
-// save "$temp/cms-panel-with-treatment-hcpcs", replace
-// use  "$temp/cms-panel-with-treatment-hcpcs", clear
-
 

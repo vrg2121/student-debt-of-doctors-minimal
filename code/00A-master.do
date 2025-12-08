@@ -24,7 +24,7 @@
 
 * Worked on project from Oct 2025:
 * 	Victoria Garcia
-*	[mail to Victoria]
+*	victoria.g.4201@gmail.com
 
 
 
@@ -32,25 +32,27 @@
 *** PATHS ***
 *************
 
-*** ONLY PATH YOU NEED TO CHANGE ***
+*** ONLY PATHS YOU NEED TO CHANGE ***
+
+* Victoria removed the data from the .git for data-mangement and version control purposes
 
 global dropbox ///
-	"C:\dropbox\Phil Research Dropbox\Victoria Garcia\Student Debt of Doctors"
+	"C:/dropbox/Phil Research Dropbox/Victoria Garcia/Student Debt of Doctors"
 //	"/Users/simonalmerstromprzybyl/new-dropbox/Dropbox/Student Debt of Doctors"
+
+global git ///
+	"C:/Users/c1vrg01/dev/student-debt-of-doctors-minimal"
 	
 *** CHANGES AUTOMATICALLY ***
 	
 global fang_gong_replication ///
 	"$dropbox/Tuition Data/replication/Fang & Gong (AER 2017) – Replication package/119565-V1"
-
-global git ///
-	"$dropbox/Tuition Data/simon/student-debt-of-doctors"
 	
 global do ///
-	"$git/code/stata"
+	"$git/code"
 	
 global temp ///
-	"$git/data/working/temp"
+	"$dropbox/Tuition Data/simon/student-debt-of-doctors/data/working/temp"
 	
 cd "$temp"
 
@@ -98,34 +100,66 @@ do "$do/01A-globals.do"
 * The file $temp/old-important-files/aamc-schools-nr-obs is not used in any of the do-files below
 
   
-* 04 – Create yearly CMS outcomes:
-do "$do/04A-create-cms-outcomes.do" // standardize yearly files for CMS outcomes
-do "$do/04B-create-cms-outcomes.do" // calculate CMS outcome variables (payments etc)
+* 02 – Create yearly CMS outcomes:
+do "$do/02A-create-cms-outcomes.do" // standardize yearly files for CMS outcomes
+do "$do/02B-create-cms-outcomes.do" // calculate CMS outcome variables (payments etc)
 
 
-* 05 – Create yearly ProPublica outcomes:
-do "$do/05A-create-propublica-outcomes.do" // calculate ProPublica outcomes
+* 03 – Create yearly ProPublica outcomes:
+do "$do/03A-create-propublica-outcomes.do" // calculate ProPublica outcomes
 
 
-* 06 – Create doctor panel:
-do "$do/06A-create-doctor-panel.do" // standardize yearly CMS characteristics files
-do "$do/06B-create-doctor-panel.do" // append standardized files to create the doctor panel
+* 04 – Create doctor panel:
+do "$do/04A-create-doctor-panel.do" // standardize yearly CMS characteristics files
+do "$do/04B-create-doctor-panel.do" // append standardized files to create the doctor panel
 
 
-* 07 – Create key between AAMC and CMS school names:
-do "$do/07A-create-aamc-cms-key.do" // TO DO: fix name issues in AAMC tuition files
-do "$do/07B-create-aamc-cms-key.do" // TO DO: create key between AAMC and CMS names
+* 05 – Define Large
+do "$do/05A-define-large.do" // define a large change in tuition using AAMC data
 
 
-* 08 – Create tuition panel for school:
-do "$do/08A-create-school-panel.do" // create school panel
+* 06 – Create key between AAMC and CMS school names:
+do "$do/06A-create-aamc-cms-key.do" // DONE: fix name issues in AAMC tuition files
+do "$do/06B-create-aamc-cms-key.do" // DONE: create key between AAMC and CMS names
 
 
-* 09 – Merge outcomes and tuition into the doctor panel (REPLACE WITH NEW SCHOOL NAME KEY):
-do "$do/09A-merge-doctor-panel.do" // CURRENTLY USES OLD KEY: $temp/old-important-files/key-our-aamc.dta
+* 07 – Create tuition panel for school:
+do "$do/07A-create-school-panel.do" // create school panel
 
 
-*** DO-FILES BELOW ARE DEPRECATED IF YOU MOVE TO ANDREW'S NEW IDENTIFICATION ***
+* 08 – Merge outcomes and tuition into the doctor panel:
+do "$do/08A-merge-doctor-panel.do" // changes from key here
+
+
+* 09 – Merge CMS and AAMC Data
+do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on mesd school name; analysis of unmatched data 
+
+
+* 10 – Regressions without HCPCS
+do "$do/10A-regressions.do" // tables
+
+
+/* HCPCS REGRESSIONS
+
+These files are intended to be run with an M4 or above chip overnight.
+
+Alternatively run as a batch job on a computer with at least 16 CPUs and 60 GB of RAM.
+
+Estimated walltime: 6 hours
+
+* 11 – Regressions with HCPCS
+global batch 
+do "$do/11A-partition-data.do" // splits data up by year and then 20ths
+do "$do/11B-hcpcs-disaggregation.do" // reshapes data by hcpcs, appends (6ish hours)
+do "$do/11C-hcpcs-regressions.do" // regressions with hcpcs FE
+*/
+
+
+* 12 – Summary Statistics / Data Exploration
+do "$do/12A-sumstat-tables.do" // work in progress
+
+
+/*** DO-FILES BELOW ARE DEPRECATED IF YOU MOVE TO ANDREW'S NEW IDENTIFICATION ***
 
 
 * 10 – Create treatment groups:
@@ -145,7 +179,7 @@ do "$do/12A-extras.do" // extras
 * 13 – Scrap code:
 do "$do/13A-scrap-code.do" // scrap
 
-
+*/
 
 ******************************************
 *** SIMON'S COMMENTS ABOUT FILES ABOVE ***
