@@ -52,23 +52,24 @@ replace med_school = ///
 
 replace med_school = ///
 	 "at still university, arizona school of dentistry & oral hlth" if ///
-	 med_school == "a t still un, arizona schl of dent.y & oral hlth"
+	 med_school == "a t still un, arizona schl of dent.y & oral hlth" // internal consistency
 	 
 replace med_school = ///
 	"baylor college of dentistry/texas a & m university" if ///
-	med_school == "baylor college of dentistry/texas a&m university"
+	med_school == "baylor college of dentistry/texas a&m university" // internal consistency
 	
 replace med_school = ///
 	"wake forest university school of medicine" if ///
-	med_school == "bowman gray school of medicine of wake forest university"
+	med_school == "bowman gray school of medicine of wake forest university" // matches aamc
+	
+replace med_school = /// 
+	"the warren alpert medical school of brown university" if
+	inlist(med_school, "warren alpert medical school of brown university", ///
+	"brown university program in medicine") // matches aamc
 	
 replace med_school = ///
-	"warren alpert medical school of brown university" if ///
-	med_school == "brown university program in medicine"
-	
-replace med_school = ///
-	"cincinnati college of medicine & surgery" if ///
-	med_school == "university of cincinnati college of medicine" 
+	"university of cincinnati college of medicine" if ///
+	med_school ==  "cincinnati college of medicine & surgery" // matches aamc, internal consinstency
 
 // cleveland clinic lerner college of medicine is within case western reserve university, however it covers all tuition. it should be treated as a separate program. It is not found in the aamc data.
 
@@ -79,25 +80,201 @@ replace med_school = ///
 	
 replace med_school = ///
 	"cooper medical school of rowan university" if ///
-	med_school == "cooper medical college"
-	
-replace med_school = ///
-	"weill cornell medicine" if ///
-	med_school == "cornell university medical college"
+	med_school == "cooper medical college" // matches aamc, internal consistency
 	
 replace med_school = ///
 	"geisel school of medicine at dartmouth" if ///
-	med_school == "dartmouth medical school"
+	med_school == "dartmouth medical school" // matches aamc
 
 replace med_school = ///
 	"brody school of medicine at east carolina university" if ///
-	med_school == "east carolina university school of medicine"
+	med_school == "east carolina university school of medicine" // matches aamc, internal consistency
 	
 replace med_school = ///
 	"east tennessee state university james h. quillen college of medicine" if ///
 	inlist(med_school, "east tennessee state university quillen college of medicine", ///
 		"east tennessee state university, quillen-dishner college of medicine") // this matches with aamc data
 
+replace med_school = ///
+	"frank h. netter md school of medicine at quinnipiac university" if ///
+	med_school == "f h netter, m.d. school of med at quinnipiac univ" // matches aamc data
+	
+replace med_school = ///
+	"george washington university school of medicine & health sciences" if ///
+	med_school == "george washington university school of medicine" // matches aamc data
+
+replace med_school = ///
+	"georgetown university school of medicine" if ///
+	med_school == "georgetown university of medicine" // matches aamc data
+	
+replace med_school = ///
+	"hackensack meridian school of medicine" if ///
+	med_school == "hackensack meridian school of med at seton hall" // matches aamc data
+	
+replace med_school = ///
+	"donald & barbara zucker school of medicine at hofstra/northwell" if ///
+	med_school == "hofstra north shore - lij school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"university of california, irvine, school of medicine" if ///
+	inlist(med_school, "university of california, irvine, california college of medicine", ///
+		"university of california, irvine, college of medicine", ///
+		"irvine california college of medicine") // matches aamc data, internal consistency
+		
+replace med_school = ///
+	"marshall university joan c. edwards school of medicine" if ///
+	inlist(med_school,"jc edwards school of medicine, marshall university", ///
+	"marshall university school medicine") // matches aamc data, internal consistency
+	
+replace med_school = ///
+	"sidney kimmel medical college at thomas jefferson university" if ///
+	med_school == "jefferson medical college of thomas jefferson university" // matches aamc data
+	
+replace med_school = ///
+	"weill cornell medicine" if ///
+	inlist(med_school, "js weill medical college, cornell university", ///
+	"cornell university medical college") // matches aamc data
+	
+replace med_school = ///
+	"university of kentucky college of medicine" if ///
+	inlist(med_school, "kentucky school of medicine", ///
+	"kentucky university medical department") // matches aamc data
+
+replace med_school = ///
+	"university of louisville school of medicine" if ///
+	inlist(med_school, "louisville hospital medical college", ///
+	"louisville medical college", ///
+	"louisville national medical college") // matches aamc data, internal consistency
+	
+replace med_school = ///
+	"loyola university chicago stritch school of medicine" if ///
+	med_school == "loyola university of chicago, stritch school of medicine" // matches aamc data
+
+replace med_school = ///
+	"mayo clinic alix school of medicine" if ///
+	med_school == "mayo medical school" // matches aamc data
+
+replace med_school = ///
+	"medical college of georgia at augusta university" if ///
+	inlist(med_school, "medical college of georgia", ///
+	"medical college of georgia school of medicine") // matches aamc data, internal consistency
+	
+replace med_school = ///
+	"the university of toledo college of medicine & life sciences" if ///
+	inlist(med_school, "toledo medical college", ///
+	"university of toledo college of medicine", ///
+	"medical college of ohio at toledo") // matches aamc data, internal consistency
+
+replace med_school = ///
+	"virginia commonwealth university school of medicine" if ///
+	inlist(med_school, "medical college of virginia commonwealth university school of medicine", ///
+	"virginia commonwealth university, school of medicine") // matches aamc data, internal consistency
+
+replace med_school = ///
+	"meharry medical college" if ///
+	med_school == "meharry medical college school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"university of miami leonard m. miller school of medicine" if ///
+	inlist(med_school, ///
+	"university of miami school of medicine", ///
+	"university of miami, lm miller school of medicine") // matches aamc data, internal consistency
+	
+replace med_school = ///
+	"university of missouri-columbia school of medicine" if ///
+	med_school == "university of missouri, columbia school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"university of missouri-kansas city school of medicine" if ///
+	med_school == "university of missouri, kansas city, school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"university of nebraska college of medicine" if ///
+	med_school == "nebraska college of medicine" // matches aamc data, internal consistency 
+
+replace med_school = ///
+	"university of nevada, reno school of medicine" if ///
+	med_school == "university of nevada school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"university of north dakota school of medicine & health sciences" if ///
+	med_school == "university of north dakota school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"perelman school of medicine at the university of pennsylvania" if ///
+	med_school == "university of pennsylvania school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"frederick p. whiddon college of medicine at the university of south alabama" if ///
+	med_school == "university of south alabama college of medicine" // matches aamc data
+	
+replace med_school = ///
+	"university of south carolina school of medicine columbia" if ///
+	med_school == "university of south carolina school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"university of south carolina school of medicine greenville" if ///
+	med_school == "university of south carolina school of medicine, greenville" // matches aamc data
+	
+replace med_school = ///
+	"university of south dakota, sanford school of medicine" if ///
+	inlist(med_school, "university of south dakota school of medicine", ///
+	"sanford school of medicine of university of south dakota") // matches aamc data, internal consistency
+
+replace med_school = ///
+	"keck school of medicine of the university of southern california" if ///
+	inlist(med_school, "university of southern california keck school of medicine", ///
+	"university of southern california school of medicine") // matches aamc data, internal consistency
+	
+replace med_school = ///
+	"university of tennessee health science center college of medicine" if ///
+	inlist(med_school, "university of tennessee, hsc, college of medicine", ///
+	"university of tennersee college of medicine") // matches aamc data, internal consistency
+
+replace med_school = ///
+	"mcgovern medical school at the university of texas health science center at houston" if ///
+	med_school == "university of texas medical school at houston" // matches aamc data
+	
+replace med_school = ///
+	"the university of texas health science center at san antonio joe r. & teresa lozano long school of medicine" if ///
+	med_school == "university of texas medical school at san antonio" // matches aamc data
+	
+replace med_school = ///
+	"university of texas rio grande valley school of medicine" if ///
+	med_school == "university of texas rio grande valley med school" // matches aamc data
+	
+replace med_school = ///
+	"university of texas southwestern medical school" if ///
+	med_school == "university of texas southwestern medical school at dallas" // matches aamc data
+	
+replace med_school = ///
+	"spencer fox eccles school of medicine at the university of utah" if ///
+	med_school == "university of utah school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"robert larner, m.d., college of medicine at the university of vermont" if ///
+	med_school == "university of vermont college of medicine" // matches aamc data
+	
+replace med_school = ///
+	"university of wisconsin school of medicine & public health" if ///
+	inlist(med_school, "university of wisconsin medical school", ///
+	"university of wisconsin school of medicine") // matches aamc data, internal consistency
+
+replace med_school = ///
+	"washington university in st. louis school of medicine" if ///
+	med_school == "washington university school of medicine" // matches aamc data
+	
+replace med_school = ///
+	"western michigan university homer stryker m.d. school of medicine" if ///
+	med_school == "western michigan un homer stryker school of med" // matches aamc data
+	
+replace med_school = ///
+	"wright state university boonshoft school of medicine" if ///
+	med_school == "wright state university school of medicine" // matches aamc data, internal consistency
+	
+replace med_school = ///
+	"yale school of medicine" if ///
+	med_school == "yale university school of medicine" // matches aamc data, internal consistency
 	
 bys npi (year) : keep if _n == 1
 
