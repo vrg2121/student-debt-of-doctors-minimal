@@ -75,7 +75,7 @@ keep hcpcs
 
 duplicates drop
 
-save "$temp/fg-hcpcs-codes", replace
+save "$working_data/temp/fg-hcpcs-codes", replace
 
 
 *** Checking so relevant columns are always ordered the same ***
@@ -132,7 +132,7 @@ forvalues n = 12/19 {
 sort hcpcs year
 duplicates drop hcpcs, force // from FG
 
-save "$temp/fg_selection_appended_hcpcs_code", replace
+save "$working_data/temp/fg_selection_appended_hcpcs_code", replace
 
 
 *** Identifying EM codes ***
@@ -145,5 +145,5 @@ rename isem isEM
 
 tostring hcpcs, replace
 
-save "$temp/hcpcs-isEM", replace
+save "$working_data/temp/hcpcs-isEM", replace
 

@@ -64,7 +64,7 @@ forvalues n = 12/19 {
 	*** FG ***
 	
 	* FG's HCPCS codes:
-	merge m:1 hcpcs using "$temp/fg-hcpcs-codes"
+	merge m:1 hcpcs using "$working_data/temp/fg-hcpcs-codes"
 	drop if          _merge == 2
 	g fg_included =  _merge == 3 // for restriction
 	drop             _merge
@@ -91,14 +91,14 @@ forvalues n = 12/19 {
 	g fg_sel2_total_payments = all_total_payments if 				   isDrug == 0
 	g fg_sel3_total_payments = all_total_payments if hcpcsGroup == 1 & isDrug == 0 // MAIN OUTCOME!
 
-	merge m:1 hcpcs using "$temp/fg_selection_appended_hcpcs_code", keepusing(hcpcs)
+	merge m:1 hcpcs using "$working_data/temp/fg_selection_appended_hcpcs_code", keepusing(hcpcs)
 	
 	g fg_sel4_total_payments = all_total_payments if _merge == 3
 	
 	drop _merge
 	
 	* Merging on isEM:
-	merge m:1 hcpcs using "$temp/hcpcs-isEM"
+	merge m:1 hcpcs using "$working_data/temp/hcpcs-isEM"
 	drop if _merge == 2
 	drop    _merge
 
@@ -136,7 +136,7 @@ forvalues n = 12/19 {
 	
 	g year = 2000 + `n'
 	
-	save "$temp/emiel-total_payments-fg-hcpcs-codes-20`n'", replace
+	save "$working_data/temp/emiel-total_payments-fg-hcpcs-codes-20`n'", replace
 	
 }
 
@@ -144,7 +144,7 @@ forvalues n = 12/19 {
 clear
 forvalues n = 12/19 {
 	
-	append using "$temp/emiel-total_payments-fg-hcpcs-codes-20`n'"
+	append using "$working_data/temp/emiel-total_payments-fg-hcpcs-codes-20`n'"
 	
 }
 
@@ -157,7 +157,7 @@ foreach var of global payment_vars {
 	
 }
 
-save "$temp/emiel-total_payments-fg-hcpcs-codes", replace
+save "$working_data/temp/emiel-total_payments-fg-hcpcs-codes", replace
 
 
 ***************************************************************
@@ -175,7 +175,7 @@ forvalues n = 12/19 {
 	rename hcpcs_cd   hcpcs
 
 	* Merging on isEM:
-	merge m:1 hcpcs using "$temp/hcpcs-isEM"
+	merge m:1 hcpcs using "$working_data/temp/hcpcs-isEM"
 	drop if _merge == 2
 	drop    _merge
 
@@ -193,7 +193,7 @@ forvalues n = 12/19 {
 	
 	order year, after(npi)
 	
-	save "$temp/em-average-payments-`n'", replace
+	save "$working_data/temp/em-average-payments-`n'", replace
 	
 }
 
@@ -201,7 +201,7 @@ forvalues n = 12/19 {
 clear
 forvalues n = 12/19 {
 	
-	append using "$temp/em-average-payments-`n'"
+	append using "$working_data/temp/em-average-payments-`n'"
 	
 }
 
@@ -213,7 +213,7 @@ foreach var in `r(varlist)' {
 	
 }
 
-save "$temp/em-average-payments", replace
+save "$working_data/temp/em-average-payments", replace
 
 
 ****************************************************
@@ -245,17 +245,17 @@ forvalues n = 12/19 {
 	
 	keep npi year hcpcs tot_srvcs fg_sel3
 	
-	save "$temp/nServ-20`n'-new", replace
+	save "$working_data/temp/nServ-20`n'-new", replace
 	
 }
 
 clear
 forvalues n = 12/19 {
-	append using "$temp/nServ-20`n'-new"
+	append using "$working_data/temp/nServ-20`n'-new"
 }
 
 * Merging on isEM:
-merge m:1 hcpcs using "$temp/hcpcs-isEM"
+merge m:1 hcpcs using "$working_data/temp/hcpcs-isEM"
 drop if _merge == 2
 drop    _merge
 
@@ -290,4 +290,4 @@ foreach n in 3 5 { // 3 is our ordinary selection and 5 is EM
 
 collapse (sum) *nServ *nCode, by(npi year)
 
-save "$temp/nCodes-new", replace
+save "$working_data/temp/nCodes-new", replace

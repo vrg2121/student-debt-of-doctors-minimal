@@ -13,22 +13,12 @@ Victoria Garcia
 December 2025
 */
 
-*** DIRECTORIES ***
-* dropbox *
-/*
-global proj_dropbox "C:/dropbox/Phil Research Dropbox/Victoria Garcia/Student Debt of Doctors"
-
-global v_data "$proj_dropbox/Tuition Data/victoria-temp/data"
-
-glboal v_tables "$proj_dropbox/Tuition Data/victoria-temp/tables"
-*/
-
 * cluster *
-global v_data "/home/victoria.garcia/Batch/data"
-global v_tables "/home/victoria.garcia/Batch/tables"
+global batch_data "/home/victoria.garcia/Batch/data"
+global batch_tables "/home/victoria.garcia/Batch/tables"
 
 *** LOAD IDENTIFIED HCPCS DATA ***
-use "$v_data/hcpcs/cms_aamc_id_hcpcs", clear
+use "$batch_data/hcpcs/cms_aamc_id_hcpcs", clear
 
 label var tuition_bill "Tuition bill"
 
@@ -71,7 +61,7 @@ estfe est*, labels(                 /// ssc install erepost
 	ngrouppac  "Group FE"           ///
 	hcpcs      "HCPCS FE")
 
-esttab est* using "$v_tables/fe-regs-hcpcs-avg_mdcr_pymt_amt.tex", ///
+esttab est* using "$batch_tables/fe-regs-hcpcs-avg_mdcr_pymt_amt.tex", ///
 	keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
 	indicate(`r(indicate_fe)') nomtitles ///
 	stats(N N_clust mean pct_mean, fmt(%9.0fc %9.0fc 3 1) labels("Observations (dr-yr-hcpcs)" "Clusters" "Mean" "Coef.\ \% of Mean")) ///
@@ -120,7 +110,7 @@ foreach FE of global revamp_hcpcs_fe{
 esttab est*, keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label
 estfe . est*, labels(school_id#year "School-Year FE" ngrouppac#Year "GroupPAC-Year FE" hrr "HRR FE" physpec "Specialization FE"hcpcs "HCPCS FE")						
 	
-esttab est* using "$v_tables/revamp-fe-regs-hcpcs-avg_mdcr_pymt_amt.tex", ///
+esttab est* using "$batch_tables/revamp-fe-regs-hcpcs-avg_mdcr_pymt_amt.tex", ///
 	keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
 	indicate(`r(indicate_fe)') nomtitles ///
 	stats(N unique_drs N_clust /* unique_schools */ mean pct_mean, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1) labels("Observations (doctor-years)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef.\ \% of Mean")) ///

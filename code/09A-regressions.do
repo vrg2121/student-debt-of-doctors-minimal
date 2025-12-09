@@ -9,14 +9,10 @@ December 2025
 */
 
 clear all
-
-*** DIRECTORIES ***
-
-global table_repo "$git/tables"
 	
 *** LOAD IDENTIFIED DATA ***
 
-use "$data/cms_aamc_merge_identifier.dta", clear
+use "$working_data/cms_aamc_merge_identifier.dta", clear
 
 egen school_id = group(med_school) // this has been added to 01_cms_aamc_merge for future data 12.1.2025
 label variable school_id "med school id by med_school"
@@ -95,7 +91,7 @@ foreach oc of global outcome {
 		hrr "HRR FE"						///
 		groupPAC "Group FE")
 		
-	esttab est* using "$table_repo/fe-regs-`oc'.tex", ///
+	esttab est* using "$tables/fe-regs-`oc'.tex", ///
 		keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
 		indicate(`r(indicate_fe)') nomtitles ///
 		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1) labels("Observations (doctor-years)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef.\ \% of Mean")) ///
@@ -148,7 +144,7 @@ foreach oc of global outcome {
 	esttab est*, keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label
 	estfe . est*, labels(school_id#year "School-Year FE" ngroupPAC#Year "GroupPAC-Year FE" hrr "HRR FE" phySpec "Specialization FE")						
 		
-	esttab est* using "$table_repo/revamp-fe-regs-`oc'.tex", ///
+	esttab est* using "$tables/revamp-fe-regs-`oc'.tex", ///
 		keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
 		indicate(`r(indicate_fe)') nomtitles ///
 		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1) labels("Observations (doctor-years)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef.\ \% of Mean")) ///

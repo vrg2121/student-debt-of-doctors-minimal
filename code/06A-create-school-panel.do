@@ -17,7 +17,7 @@
 
 
 * Fixed file from earlier do-files:
-use "$temp/full-aamc-tuition", clear
+use "$working_data/temp/full-aamc-tuition", clear
 
 * Make aca_year integer:
 destring aca_year, replace
@@ -57,7 +57,7 @@ keep med_school tuition aca_year PublicSchool
 
 * Deprecated:
 // * Only care about selected schools:
-//    merge m:1 med_school using "$temp/old-important-files/aamc-schools-nr-obs"
+//    merge m:1 med_school using "$working_data/temp/old-important-files/aamc-schools-nr-obs"
 // // keep if _merge == 3
 //    drop if _merge == 2
 //    drop _merge
@@ -67,7 +67,7 @@ keep med_school tuition aca_year PublicSchool
 
 g source = "aamc"
 
-save "$temp/pre-aamc-tuition", replace
+save "$working_data/temp/pre-aamc-tuition", replace
 
 
 *** IPEDS ***
@@ -102,7 +102,7 @@ save "$temp/pre-aamc-tuition", replace
 // 		rename unitid med_school
 //		
 // 		* Keep only relevant schools:
-// 		merge m:1 med_school using "$temp/old-important-files/aamc-schools-nr-obs"
+// 		merge m:1 med_school using "$working_data/temp/old-important-files/aamc-schools-nr-obs"
 // // 		keep if _merge == 3
 // 		drop if _merge == 2
 // 		drop _merge
@@ -132,7 +132,7 @@ save "$temp/pre-aamc-tuition", replace
 //		
 // 		drop if tuition == .
 //		
-// 		save "$temp/ipeds-tuition-`j'", replace
+// 		save "$working_data/temp/ipeds-tuition-`j'", replace
 //		
 // 	}
 //	
@@ -143,7 +143,7 @@ save "$temp/pre-aamc-tuition", replace
 //	
 // 	if !inlist(`j', 2009, 2010, 2011) { // think about the revised years
 //	
-// 		append using "$temp/ipeds-tuition-`j'"
+// 		append using "$working_data/temp/ipeds-tuition-`j'"
 //		
 // 	}
 //
@@ -151,13 +151,13 @@ save "$temp/pre-aamc-tuition", replace
 //
 // g source = "ipeds"
 //
-// save "$temp/pre-ipeds-tuition", replace
+// save "$working_data/temp/pre-ipeds-tuition", replace
 
 
 *** COMBINED AAMC/IPEDS PANEL ***
 
-   use          "$temp/pre-aamc-tuition", clear
-// append using "$temp/pre-ipeds-tuition"
+   use          "$working_data/temp/pre-aamc-tuition", clear
+// append using "$working_data/temp/pre-ipeds-tuition"
 
 label var aca_year "Academic year (e.g. academic year 2000-2001 -> aca_year = 2000)"
 
@@ -218,7 +218,7 @@ egen Tuition_quantile = xtile(tuition), n(4) by(aca_year) // ssc install egenmor
 label var tuition_bill "Tuition bill (USD 1,000)"
 label var PublicSchool "Public school (Dummy)"
 
-save "$temp/aamc-tuition", replace
+save "$working_data/panels/aamc-tuition", replace
 
 
 

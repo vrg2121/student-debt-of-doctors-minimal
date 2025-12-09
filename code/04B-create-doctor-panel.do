@@ -20,7 +20,7 @@
 clear
 forvalues n = 2013/2025 { // 2011/2025
 
-	append using "$temp/minimal-chars-`n'"
+	append using "$working_data/temp/minimal-chars-`n'"
 	
 }
 
@@ -144,4 +144,4 @@ drop min_et
 bys npi  year  : assert _N == 1
 bys npi (year) : assert year[_n] + 1 == year[_n + 1] if _n < _N
 
-save "$temp/cms-panel-raw", replace
+save "$working_data/temp/cms-panel-raw", replace

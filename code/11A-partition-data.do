@@ -8,25 +8,10 @@ Victoria Garcia
 December, 2025
 */
 
-*** SET DATA LOCATION ***
-* dropbox *
-/*
-global proj_dropbox "C:/dropbox/Phil Research Dropbox/Victoria Garcia/Student Debt of Doctors"
-
-global v_data "$proj_dropbox/Tuition Data/victoria-temp/data"
-
-global working_data "$v_data/raw_temp"
-	
-global code_repo "$proj_dropbox/Tuition Data/victoria-temp/code/do_files"
-	
-cd "$code_repo"
-*/
-
-* cluster *
-global v_data "/home/victoria.garcia/Batch/data"
+*** SET DATA LOCATION IN CLUSTER ***
 
 ** disaggregate identified data by hcpcs **
-use "$v_data/cms_aamc_merge_indentifier", clear
+use "$batch_data/cms_aamc_merge_indentifier", clear
 
 keep ///
 	npi             ///
@@ -48,7 +33,7 @@ forvalues y = $min / $max {
 	preserve
 	
 	keep if year == `y'
-	save "$v_data/cms_aamc_id_`y'", replace
+	save "$batch_data/cms_aamc_id_`y'", replace
 	
 	restore	
 }
@@ -57,12 +42,12 @@ clear
 
 forvalues y = $min / $max {
 	* directory to hold data *
-	confirmdir "$v_data/`y'/" 	
+	confirmdir "$batch_data/`y'/" 	
 	if _rc == 170 {
-		mkdir "$v_data/`y'/"	
+		mkdir "$batch_data/`y'/"	
 	}
 	
-	use "$v_data/cms_aamc_id_`y'", clear
+	use "$batch_data/cms_aamc_id_`y'", clear
 	
 	set seed 123
 	gen rannum = uniform()
@@ -73,7 +58,7 @@ forvalues y = $min / $max {
 	preserve
 	forvalues i = 0/19 {
 		keep if grp == `i'
-		save"$v_data/`y'/cms_aamc_id_`y'_`i'", replace
+		save"$batch_data/`y'/cms_aamc_id_`y'_`i'", replace
 		restore, preserve
 	}
 	restore

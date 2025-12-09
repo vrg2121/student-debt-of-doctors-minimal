@@ -37,7 +37,7 @@
 
 
 * Finding all sheets in the Excel and looping over them (unnecessarily complicated):
-import excel using "$git/data/original/aamc/excels/modified/data/aamc-tuition-1995-2024", describe
+import excel using "$raw_data/aamc/excels/modified/data/aamc-tuition-1995-2024", describe
 return list
 local n_sheets `r(N_worksheet)'
 
@@ -48,7 +48,7 @@ forvalues j = 1 / `n_sheets' {
 	local sheets `sheets' `sheet'
 	
 	import excel ///
-		"$git/data/original/aamc/excels/modified/data/aamc-tuition-1995-2024", ///
+		"$raw_data/aamc/excels/modified/data/aamc-tuition-1995-2024", ///
 		clear firstrow sheet("`sheet'")
 	
 	g aca_year = substr("`sheet'", 1, 4) // if academic year is 2000-2001, we choose 2000 here
@@ -58,14 +58,14 @@ forvalues j = 1 / `n_sheets' {
 	* Make aca_year integer:
 // 	destring aca_year, replace // loop breaks down with this, why?
 		
-	save "$temp/aamc-tuition-`sheet'", replace
+	save "$working_data/temp/aamc-tuition-`sheet'", replace
 		
 }
 
 clear
 foreach sheet of local sheets {
 	
-	append using "$temp/aamc-tuition-`sheet'"
+	append using "$working_data/temp/aamc-tuition-`sheet'"
 
 }
 
@@ -97,7 +97,9 @@ replace med_school =  ///
 	"uniformed services university of the health sciences f. edward hebert school of medicine" if med_school == ///
 	"uniformed services university of the health sciences f. edward hebert school of medicine3"
 
-save "$temp/full-aamc-tuition", replace
+sort med_school aca_year
+
+save "$working_data/temp/full-aamc-tuition", replace
 
 keep med_school
 
@@ -105,4 +107,4 @@ duplicates drop
 
 sort med_school
 
-export excel "$temp/full-aamc-schools.xlsx", replace firstrow(var)
+export excel "$working_data/temp/full-aamc-schools.xlsx", replace firstrow(var)

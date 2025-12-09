@@ -29,35 +29,35 @@ import delimited ///
 bys npi 				 : keep if _n == 1
 bys physician_profile_id : keep if _n == 1	
 
-save "$temp/propublica-npi-pid", replace
+save "$working_data/temp/propublica-npi-pid", replace
 
 import delimited "$dropbox/ProRepublica/20180702b-docdollars-payments.csv", clear colrange(32:32)
 
 g double row = _n
 
-save "$temp/propublica-docdollars-total-amount-temp", replace
+save "$working_data/temp/propublica-docdollars-total-amount-temp", replace
 
 import delimited "$dropbox/ProRepublica/20180702b-docdollars-payments.csv", clear colrange(59:59)
 
 g double row = _n
 
-save "$temp/propublica-docdollars-year-temp", replace
+save "$working_data/temp/propublica-docdollars-year-temp", replace
 
 import delimited "$dropbox/ProRepublica/20180702b-docdollars-payments.csv", clear colrange(7:7)
 
 g double row = _n
 
-merge 1:1 row using "$temp/propublica-docdollars-total-amount-temp"
+merge 1:1 row using "$working_data/temp/propublica-docdollars-total-amount-temp"
 assert _merge == 3
 drop _merge
 
-merge 1:1 row using "$temp/propublica-docdollars-year-temp"
+merge 1:1 row using "$working_data/temp/propublica-docdollars-year-temp"
 assert _merge == 3
 drop _merge
 
 drop row
 
-merge m:1 physician_profile_id using "$temp/propublica-npi-pid"
+merge m:1 physician_profile_id using "$working_data/temp/propublica-npi-pid"
 keep if _merge == 3
 drop _merge
 
@@ -67,14 +67,14 @@ rename program_year year
 
 collapse (sum) total_amount_of_payment_usdollar, by(npi year)
 
-save "$temp/propublica-docdollars-total-amount", replace
+save "$working_data/temp/propublica-docdollars-total-amount", replace
 
 
 **************************************
 *** BRAND CLAIMS AND BENEFICIARIES ***
 **************************************
 
-cap erase "$temp/propublica-brand-claims-beneficiaries.dta"
+cap erase "$working_data/temp/propublica-brand-claims-beneficiaries.dta"
 forvalues n = 2013/2016 {
 
 	cap import delimited ///
@@ -131,8 +131,8 @@ forvalues n = 2013/2016 {
 	
 	g year = `n'
 	
-	cap append using "$temp/propublica-brand-claims-beneficiaries"
+	cap append using "$working_data/temp/propublica-brand-claims-beneficiaries"
 	
-	save "$temp/propublica-brand-claims-beneficiaries", replace
+	save "$working_data/temp/propublica-brand-claims-beneficiaries", replace
 	
 }

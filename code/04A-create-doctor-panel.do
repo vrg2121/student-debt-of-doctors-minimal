@@ -55,14 +55,14 @@ foreach section in A-G H-N O-Z {
 		"$fang_gong_replication/input/National_physician_`section'.csv", ///
 		clear varnames(1) stringcols(_all)
 		
-	save "$temp/fg-characteristics-`section'", replace
+	save "$working_data/temp/fg-characteristics-`section'", replace
 	
 }
 
 clear
 foreach section in A-G H-N O-Z {
 	
-	append using "$temp/fg-characteristics-`section'"
+	append using "$working_data/temp/fg-characteristics-`section'"
 	
 }
 
@@ -141,6 +141,6 @@ forvalues n = 2013/2025 {
 	
 	keep npi year `keep'
 	
-	save "$temp/minimal-chars-`n'", replace
+	save "$working_data/temp/minimal-chars-`n'", replace
 
 }

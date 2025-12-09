@@ -18,13 +18,13 @@
 
 
 * Read panel:
-use "$temp/cms-panel-raw", clear
+use "$working_data/temp/cms-panel-raw", clear
 
 
 *** MERGE IN CMS PAYMENTS ***
 
 * Merge in payments variable (already inflation adjusted):
-merge 1:1 npi year using "$temp/emiel-total_payments-fg-hcpcs-codes"
+merge 1:1 npi year using "$working_data/temp/emiel-total_payments-fg-hcpcs-codes"
 
 * Doctors who never receive a payment:
 bys npi (_merge) : g no_pay_ever = _merge[1] == 1 & _merge[_N] == 1
@@ -45,14 +45,14 @@ foreach var of global payment_vars {
 }
 
 * Average evaluation and management codes (E/M) payments:
-merge 1:1 npi year using "$temp/em-average-payments"
+merge 1:1 npi year using "$working_data/temp/em-average-payments"
 drop if _merge == 2
 drop    _merge
 
 
 *** MERGE IN CMS TOTAL NUMBER OF SERVICES AND UNIQUE SERVICES ***
 
-merge 1:1 npi year using "$temp/nCodes-new"
+merge 1:1 npi year using "$working_data/temp/nCodes-new"
 drop if _merge == 2
 drop    _merge
 
@@ -64,7 +64,7 @@ foreach var in `r(varlist)' {
 
 *** MERGE IN ProPublica AND MODIFY SOME VARIABLES ***
 
-merge 1:1 npi year using "$temp/propublica-docdollars-total-amount"
+merge 1:1 npi year using "$working_data/temp/propublica-docdollars-total-amount"
 drop if _merge == 2
 drop _merge
 
@@ -72,7 +72,7 @@ drop _merge
 g       pp_payment =      total_amount_of_payment_usdollar >  0 if inrange(year, 2013, 2016)
 replace pp_payment = 0 if total_amount_of_payment_usdollar == . &  inrange(year, 2013, 2016)
 
-merge 1:1 npi year using "$temp/propublica-brand-claims-beneficiaries"
+merge 1:1 npi year using "$working_data/temp/propublica-brand-claims-beneficiaries"
 drop if _merge == 2
 drop _merge
 
@@ -129,14 +129,14 @@ drop    _merge
 * REPLACE BELOW WITH NEW KEY WHEN FIXED!
 
 * Merge in AAMC school name using the CMS-AAMC school name key:
-merge m:1 our_med_school using "$temp/old-important-files/key-our-aamc", keepusing(med_school) // REPLACE!
+merge m:1 our_med_school using "$working_data/temp/old-important-files/key-our-aamc", keepusing(med_school) // REPLACE!
 drop if _merge == 2
 drop _merge
 
 * Merge in tuition etc:
 g aca_year = grad_year - 1 // graduation year 2001 corresponds to academic year 2000-2001
 
-merge m:1 med_school aca_year using "$temp/aamc-tuition", ///
+merge m:1 med_school aca_year using "$working_data/temp/aamc-tuition", ///
 	keepusing(PublicSchool *tuition_bill *_school source)
 drop if _merge == 2
 drop _merge
@@ -182,4 +182,4 @@ keep if isMD == 1
 
 sort npi year
 
-save "$temp/cms-panel", replace
+save "$working_data/panels/cms-panel", replace

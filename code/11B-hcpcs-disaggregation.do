@@ -12,17 +12,9 @@ Victoria Garcia
 December 2025
 */
 
-*** SET DATA LOCATION ***
+*** SET DATA LOCATION IN CLUSTER ***
 
-* dropbox *
-/*
-global proj_dropbox "C:/dropbox/Phil Research Dropbox/Victoria Garcia/Student Debt of Doctors"
-
-global v_data "$proj_dropbox/Tuition Data/victoria-temp/data"
-*/
-
-* cluster *
-v_data "/home/victoria.garcia/Batch/data"
+global batch_data "/home/victoria.garcia/Batch/data"
 
 *** DISAGGREGATE IDENTIFIED DATA BY HCPCS ***
 
@@ -31,7 +23,7 @@ set processors 7
 parallel initialize 14
 
 * find years *
-use year using "$v_data/cms_aamc_merge_indentifier", clear
+use year using "$batch_data/cms_aamc_merge_indentifier", clear
 
 sum year
 global min = r(min)
@@ -46,7 +38,7 @@ forvalues year = $min / $max {
 
 	forvalues i = 0 / 19 {
 		display "Reshaping year `year', section `i'"
-		import delimited "$v_data/`year'/cms_aamc_id_`year'_`i'.csv", clear
+		import delimited "$batch_data/`year'/cms_aamc_id_`year'_`i'.csv", clear
 		
 		capture: confirm str variable grouppac
 		
@@ -64,7 +56,7 @@ forvalues year = $min / $max {
 		display "`year' reshape complete"
 		
 	}
-	save "$v_data/hcpcs/cms_aamc_id_hcpcs_`year'", replace
+	save "$batch_data/hcpcs/cms_aamc_id_hcpcs_`year'", replace
 	
 	clear
 }
@@ -76,7 +68,7 @@ tempfile hcpcs_id
 save `hcpcs_id', emptyok replace
 
 forvalues i = $min / $max {
-	use "$v_data/hcpcs/cms_aamc_id_hcpcs_`i'", clear
+	use "$batch_data/hcpcs/cms_aamc_id_hcpcs_`i'", clear
 	
 	append using `hcpcs_id'
 	save `hcpcs_id', replace
@@ -84,4 +76,4 @@ forvalues i = $min / $max {
 	display "`i' has been appended"
 }
 
-save "$v_data/hcpcs/cms_aamc_id_hcpcs", replace
+save "$batch_data/hcpcs/cms_aamc_id_hcpcs", replace

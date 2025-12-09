@@ -18,19 +18,19 @@
 
 *** AAMC SCHOOLS ***
 	
-use "$temp/full-aamc-tuition", clear
+use "$working_data/temp/full-aamc-tuition", clear
 
 keep our_med_school
 
 duplicates drop
 
-export excel "$temp/aamc-schools.xlsx", replace firstrow(var)
-save         "$temp/aamc-schools"     , replace
+export excel "$working_data/temp/aamc-schools.xlsx", replace firstrow(var)
+save         "$working_data/temp/aamc-schools"     , replace
 
 
 *** CMS SCHOOLS ***
 
-use "$temp/cms-panel-raw", clear
+use "$working_data/temp/cms-panel-raw", clear
 
 keep if isMD == 1 // should imply four years of medical school
 
@@ -296,109 +296,6 @@ drop total
 
 sort our_med_school
 
-export excel "$temp/cms-schools.xlsx", replace firstrow(var)
-save         "$temp/cms-schools"     , replace
-
-
-*** MERGE CMS NAMES WITH AAMC NAMES ***
-
-use "$temp/cms-schools", clear
-
-rename our_med_school med_school
-
-merge 1:1 med_school using "$temp/aamc-schools"
-
-keep if _merge == 1 // & cumulative_perc <= 90 // TRUNCATE IF OK!
-drop    _merge
-
-rename med_school our_med_school
-
-keep our_med_school
-
-bys our_med_school : assert _N == 1
-
-export excel "$temp/remaining-cms-schools.xlsx", replace firstrow(var)
-save         "$temp/remaining-cms-schools"     , replace
-
-
-*** INTERMEDIATE MANUAL STEP ***
-
-* For each school in "$temp/remaining-cms-schools.xlsx",
-* manually try to find a match in "$temp/aamc-schools.xlsx"
-
-* Call the resulting Excel:
-*	"$temp/aamc-matched-remaining-schools.xlsx"
-
-* The Excel should have two columns:
-*	our_med_school
-*	med_school
-
-* TEMP 1:
-*	Simon created "$temp/aamc-matched-remaining-schools.xlsx" matching only one school
-
-* TEMP 2:
-*	We can use the old key as help/inspiration to build the new key:
-
-	* For completeness, this is the old deprecated Excel which builds the old key used below:
-	
-	* 	"$git/data/working/unique-names/output-excels/final/matching-names.xlsx"
-	
-	use "$temp/old-important-files/key-our-aamc", clear // old key
-
-	keep if source == "aamc"
-
-	keep *med_school
-
-	drop if med_school == our_med_school // already matches perfectly
-	
-	order our_med_school med_school
-	
-	export excel "$temp/old-key-inspiration.xlsx", replace firstrow(var) // old key
-
-
-*** CREATE KEY ***
-	
-import excel "$temp/aamc-matched-remaining-schools.xlsx", clear firstrow
-save         "$temp/aamc-matched-remaining-schools"     , replace
-	
-use our_med_school using "$temp/cms-schools", clear
-
-rename our_med_school med_school
-
-merge 1:1 med_school using "$temp/aamc-schools"
-keep if _merge == 3
-drop    _merge
-
-g our_med_school = med_school // since this is the matched schools
-
-append using "$temp/aamc-matched-remaining-schools"
-
-drop if med_school == ""
-
-bys our_med_school : assert _N == 1
-
-order our_med_school med_school
-
-save "aamc-cms-school-name-key", replace
-
-
-*** INVESTIGATE NAME MATCHING ***
-
-use "$temp/cms-schools", clear
-
-merge 1:1 our_med_school using "aamc-cms-school-name-key"
-assert _merge != 2
-
-drop med_school // we only care about _merge
-
-gsort -n
-
-* Visually:
-// br
-
-* Quantitatively:
-collapse (sum) perc, by(_merge)
-// br
-
-* Good enough or does IPEDS need to be added?
+export excel "$working_data/temp/cms-schools.xlsx", replace firstrow(var)
+save         "$working_data/temp/cms-schools"     , replace
 

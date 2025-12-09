@@ -31,7 +31,7 @@ global rel_large = 7 // relative change of real tuition in %
 *** Reviewing the Data ***
 * Check for Tuition Decreases *
 
-use "$temp/aamc-tuition", clear
+use "$working_data/panels/aamc-tuition", clear
 g neg_delta_nominal = delta_nominal_tuition <= 0
 g neg_delta = delta_tuition <= 0
 
@@ -197,6 +197,6 @@ drop group cohort_year new_cohort_marker counter school_id
 
 
 *** Export School data with "large" identifiers ***
-save "$v_data/aamc_large_identifier", replace
+save "$working_data/aamc_large_identifier", replace
 
 
