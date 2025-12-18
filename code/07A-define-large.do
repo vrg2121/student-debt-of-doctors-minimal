@@ -19,7 +19,6 @@ Victoria Garcia
 10.24.2025
 */
 
-clear all
 
 *** DEFINE LARGE TUITION INCREASE ***
 
@@ -93,7 +92,7 @@ label variable rel_lg_delta "Large relative change in real tuition, pct_delta >=
 
 /* note: relative value reasoning and the 90th pctile
 i.e. if the average tuition change was negative for all schools, a small positive increase would be relatively large
-e.g. in 2022, the % change in tuition on average was -56.255%, whereas the average % change in 215 was 3.854%
+e.g. in 2022, the % change in tuition on average was -56.255%, whereas the average % change in 2015 was 3.854%
 
 Note: This is automatically set to approx 1/10 of the dataset having a "large" increase in tuition. It's a little less than a 10th of the data because some of the cutoff points were negative.
 */
@@ -163,26 +162,52 @@ relatively large for all years and each med school: 12 / 425 (3%)
 */
 
 *** Create Cohort Dummies ***
-
-
-// Determine which measure of large to use
-loc large = abs_lg_delta // $2000 increase
-
+g grad_year = aca_year + 1 // Adjusting for grad_year; e.g. 2001 if graduating in academic year 2000-2001
+					 
 egen school_id = group(med_school)
 sort school_id aca_year
 
-by school_id : g new_cohort_marker = 1 if (`large' == 1) | (aca_year - aca_year[_n - 1] > 3 & _n < _N)
-by school_id : g cohort_year = aca_year if new_cohort_marker == 1
-by school_id : replace cohort_year = cohort_year[_n-1] if missing(cohort_year)
-by school_id : replace cohort_year = aca_year[1] if missing(cohort_year)
+by school_id : g obsnum = _n
 
+// Create cohort change indicators
+g cohort_reason = ""
+by school_id : g new_cohort = 1 if rel_lg_delta == 1 // CHANGE DEF OF LARGE HERE
+replace cohort_reason = "tuition-change" if new_cohort == 1
+replace new_cohort = 1 if obsnum == 1 // new cohort marker begins with new school
+replace cohort_reason = "first-yr-data" if new_cohort == 1 & obsnum == 1
+
+global base_yr = .
+global tot = _N
+
+forval i = 1/$tot {
+	if new_cohort[`i'] == 1 {
+		global base_yr = aca_year[`i']
+	}
+	else{
+		if $base_yr != . {
+			loc current = aca_year[`i']
+			if `current' - $base_yr > 3 {
+				replace new_cohort = 1 in `i'
+				global base_yr = aca_year[`i']
+			}
+		}
+	}
+} // new cohort marker every 4 years 
+replace cohort_reason = "4-yr-cohort" if new_cohort == 1 & cohort_reason == ""
+
+g cohort_year = aca_year if new_cohort == 1
+replace cohort_year = cohort_year[_n - 1] if missing(cohort_year) // cohorts are defined by the year they STARTED
+
+save "$working_data/aamc_large_id_cohort_analysis", replace
+replace cohort_reason = cohort_reason[_n - 1] if cohort_reason == ""
+
+// create dum_* variables
 by school_id : g counter = mod(aca_year - cohort_year, 4) + 1
-
 by school_id : g group = sum(counter == 1)
 
-levelsof school_id, local(schools)
+levelsof school_id
 
-foreach school of numlist `schools' {
+foreach school in `r(levels)' {
 	quietly summarize group if school_id == `school'
 	loc max_group = r(max)
 	
@@ -193,7 +218,9 @@ foreach school of numlist `schools' {
 	
 }
 
-drop group cohort_year new_cohort_marker counter school_id
+label var cohort_reason "new cohort assignment reason"
+
+drop new_cohort cohort_year group counter obsnum
 
 
 *** Export School data with "large" identifiers ***

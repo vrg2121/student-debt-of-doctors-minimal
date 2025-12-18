@@ -1,0 +1,29 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{5}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         \\
+\hline
+Tuition bill (USD 1,000)&      -0.829\sym{***}&    -0.00796         &      -0.126\sym{***}&     -0.0497\sym{***}&     -0.0471\sym{***}\\
+                    &    (0.0468)         &    (0.0171)         &    (0.0205)         &    (0.0123)         &   (0.00686)         \\
+[1em]
+School FE           &         Yes         &          No         &          No         &          No         &          No         \\
+[1em]
+Graduation Year FE  &          No         &         Yes         &          No         &          No         &          No         \\
+[1em]
+Specialization FE   &          No         &          No         &         Yes         &          No         &          No         \\
+[1em]
+HRR FE              &          No         &          No         &          No         &         Yes         &          No         \\
+[1em]
+Group FE            &          No         &          No         &          No         &          No         &         Yes         \\
+\hline
+Observations (doctor-years)&     844,939         &     844,939         &     844,936         &     840,267         &     828,246         \\
+Doctors             &     148,644         &     148,644         &     148,643         &     147,976         &     147,477         \\
+Clusters            &         134         &         134         &         134         &         134         &         134         \\
+Mean                &      71.829         &      71.829         &      71.829         &      72.072         &      71.306         \\
+Coef.\ \% of Mean   &        -1.2         &        -0.0         &        -0.2         &        -0.1         &        -0.1         \\
+\hline\hline
+\multicolumn{6}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{6}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+}

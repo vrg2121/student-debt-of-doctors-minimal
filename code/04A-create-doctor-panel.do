@@ -22,7 +22,7 @@
 * We will let this be the 2011-2012 files, which might not be correct
 
 * Emiel's final characteristics file:
-use "$dropbox/FullData/RawData/characteristics_suplemented.dta", clear
+use "$dropbox/FullData/RawData/characteristics_suplemented", clear
 
 replace grd_yr = gradYear if grd_yr == .
 

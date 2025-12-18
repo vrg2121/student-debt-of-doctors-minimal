@@ -18,7 +18,7 @@
 
 
 * Read panel:
-use "$working_data/temp/cms-panel-raw", clear
+use "$working_data/temp/cms-panel-clean-name", clear
 
 
 *** MERGE IN CMS PAYMENTS ***
@@ -126,6 +126,9 @@ merge m:1 zip5 using "$dropbox/FullData/zip_hrr"
 drop if _merge == 2
 drop    _merge
 
+
+/*
+
 * REPLACE BELOW WITH NEW KEY WHEN FIXED!
 
 * Merge in AAMC school name using the CMS-AAMC school name key:
@@ -143,6 +146,7 @@ drop _merge
 
 rename aca_year aca_grad_year
 
+*/
 
 *** LABEL VARIABLES ***
 
@@ -183,3 +187,5 @@ keep if isMD == 1
 sort npi year
 
 save "$working_data/panels/cms-panel", replace
+
+

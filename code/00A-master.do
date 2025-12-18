@@ -111,10 +111,8 @@ do "$do/07A-define-large.do" // define a large change in tuition using AAMC data
 * 08 – Merge outcomes and tuition into the doctor panel:
 do "$do/08A-merge-doctor-panel.do" // changes from key here
 
-
 * 09 – Merge CMS and AAMC Data
-do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on mesd school name; analysis of unmatched data 
-
+do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on med school name; analysis of unmatched data 
 
 * 10 – Regressions without HCPCS
 do "$do/10A-regressions.do" // tables
@@ -150,6 +148,7 @@ do "$do/11C-hcpcs-regressions.do" // regressions with hcpcs FE
 
 * 12 – Summary Statistics / Data Exploration
 do "$do/12A-sumstat-tables.do" // work in progress
+
 
 
 /*** DO-FILES BELOW DEPRECATED BY MOVE TO ANDREW'S NEW IDENTIFICATION ***

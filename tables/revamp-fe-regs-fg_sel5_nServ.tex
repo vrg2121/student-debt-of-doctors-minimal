@@ -1,0 +1,27 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
+\hline
+Tuition bill (USD 1,000)&      -6.264\sym{***}&      -4.788\sym{***}&      -6.018\sym{***}&      -6.131\sym{***}\\
+                    &     (0.332)         &     (0.260)         &     (0.315)         &     (0.319)         \\
+[1em]
+School-Year FE      &         Yes         &         Yes         &         Yes         &         Yes         \\
+[1em]
+HRR FE              &          No         &          No         &         Yes         &          No         \\
+[1em]
+Specialization FE   &          No         &          No         &          No         &         Yes         \\
+[1em]
+ngroupPAC#year      &          No         &         Yes         &          No         &          No         \\
+\hline
+Observations (doctor-years)&   1,348,735         &   1,207,617         &   1,340,699         &   1,348,732         \\
+Doctors             &     206,168         &     195,075         &     205,155         &     206,167         \\
+Clusters            &         139         &         139         &         139         &         139         \\
+Mean                &     275.745         &     249.848         &     276.658         &     275.746         \\
+Coef.\ \% of Mean   &        -2.3         &        -1.9         &        -2.2         &        -2.2         \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+}

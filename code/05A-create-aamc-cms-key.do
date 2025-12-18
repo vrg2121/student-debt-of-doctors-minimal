@@ -75,7 +75,7 @@ g formatted_med_school = med_school // good to save original capitalization
 
 replace med_school = lower(med_school) // same as we did for CMS
 
-replace med_school = subinstr(med_school, " and ", " & ", .) // same for CMS in 07B
+replace med_school = subinstr(med_school, " and ", " & ", .) // same for CMS in 05B
 
 drop if regexm(med_school, "^[\s\t]*(note:|© 2025)")
  // drop rows with non-school data
@@ -107,4 +107,4 @@ duplicates drop
 
 sort med_school
 
-export excel "$working_data/temp/full-aamc-schools.xlsx", replace firstrow(var)
+export excel "$working_data/temp/full-aamc-schools.xlsx", replace firstrow(var)5

@@ -14,12 +14,6 @@ clear all
 
 use "$working_data/cms_aamc_merge_identifier.dta", clear
 
-egen school_id = group(med_school) // this has been added to 01_cms_aamc_merge for future data 12.1.2025
-label variable school_id "med school id by med_school"
-
-encode groupPAC, gen(ngroupPAC)
-
-
 *** SET VARIABLES FOR REGRESSIONS ***
 
 /* Outcome Variable Descriptions
