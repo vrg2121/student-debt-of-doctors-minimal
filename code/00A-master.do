@@ -115,7 +115,7 @@ do "$do/08A-merge-doctor-panel.do" // changes from key here
 do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on med school name; analysis of unmatched data 
 
 * 10 – Regressions without HCPCS
-do "$do/10A-regressions.do" // tables
+do "$do/10A-regressions.do" // outputs regression tables
 
 
 /* HCPCS REGRESSIONS

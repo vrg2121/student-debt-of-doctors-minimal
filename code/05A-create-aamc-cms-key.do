@@ -107,4 +107,4 @@ duplicates drop
 
 sort med_school
 
-export excel "$working_data/temp/full-aamc-schools.xlsx", replace firstrow(var)5
+export excel "$working_data/temp/full-aamc-schools.xlsx", replace firstrow(var)

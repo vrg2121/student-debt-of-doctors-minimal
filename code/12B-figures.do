@@ -9,6 +9,39 @@ December, 2025
 */
 
 clear
+* data availability by year *
+
+use "$working_data/aamc_large_id_cohort_analysis.dta", clear
+merge 1:m med_school grad_year using "$working_data/panels/cms-panel"
+keep if _merge == 3 // keep cms data also in ammc
+drop _merge
+
+keep med_school aca_year 
+sort grad_year npi
+
+*** FREQUENCY OF TUITION INCREASES OVER TIME ***
+
+* for merged data *
+use "$working_data/cms_aamc_merge_identifier.dta", clear
+
+bysort med_school grad_year : keep if _n == 1
+collapse (sum) abs_lg_delta, by(grad_year)
+sum grad_year
+loc min = r(min)
+loc max = r(max)
+twoway bar abs_lg_delta grad_year, xlabel(`min'(2)`max') xtitle("Year") ytitle("Number of Large Tuition Shocks") note("Large Tuition = $2000 (2014USD)")
+
+* for schools only *
+use "$working_data/aamc_large_identifier", clear
+collapse (sum) abs_lg_delta, by(grad_year)
+sum grad_year
+loc min = r(min)
+loc max = r(max)
+twoway bar abs_lg_delta grad_year, xlabel(`min'(2)`max') xtitle("Year") ytitle("Number of Large Tuition Shocks - All School Data") note("Large Tuition = $2000 (2014USD)")
+twoway bar abs_lg_delta grad_year, title("Frequency of Tuition Increases over Time - All School Data") xlabel(`min'(2)`max') xtitle("Year") ytitle("Number of Large Tuition Shocks") note("Large Tuition = $2000 (2014USD)")
+
+
+* length of cohort *
 
 use "$working_data/aamc_cms_cohort_character.dta", clear
 

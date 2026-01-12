@@ -16,6 +16,23 @@ use "$working_data/aamc_large_identifier", clear
 *** Merge school and doctor data ***
 merge 1:m med_school grad_year using "$working_data/panels/cms-panel"
 
+*** SAVE MERGED DATA ***
+keep if _merge==3
+drop _merge
+									
+
+egen id = group(year npi)
+label variable id "doctor-year identifier"
+
+encode groupPAC, gen(ngroupPAC)
+
+save "$working_data/cms_aamc_merge_identifier.dta", replace
+
+/* * ANLYSIS OF UNMERGED DATA *
+
+use "$working_data/aamc_large_identifier", clear
+merge 1:m med_school grad_year using "$working_data/panels/cms-panel"
+
 by med_school grad_year, sort: gen nschool_yr = _n == 1
 count if nschool_yr == 1
 // count unique school and year combo = 7,588
@@ -78,19 +95,10 @@ drop ndoc_school_yr
 export delimited "$working_data/merge_unmatched/doc_data_missing_school.csv", replace
 
 restore
+*/
 
 
-*** SAVE MERGED DATA ***
-keep if _merge==3
-drop _merge
-									// 581,685 observations dropped
-
-egen id = group(year npi)
-label variable id "doctor-year identifier"
-
-encode groupPAC, gen(ngroupPAC)
-
-save "$working_data/cms_aamc_merge_identifier.dta", replace
+/* * ANALYSIS OF MERGED DATA *
 
 
 *** COHORT 	LENGTH FREQUENCIES ***
@@ -154,3 +162,4 @@ forvalue i = 1/20 {
 	
 }
 
+*/

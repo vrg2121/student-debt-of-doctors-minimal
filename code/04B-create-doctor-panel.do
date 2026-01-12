@@ -141,6 +141,7 @@ drop if event_time <= 0
 		// when the graduation year is < 0, it's a data error
 		// this drops 2,149 observations / 3,147,607
 
+/* CHECK ACCURACY OF CMS DATA
 	******************************************************
 /*
 
@@ -174,11 +175,17 @@ drop sus_doc
 sample 30, count
 
 export delimited "$dropbox/Tuition Data/cms_sample.csv", replace
+// see $dropbox/Tuition Data/cms_sample_checked for resutls; 1/30 was incorrect
 
 restore
 
+
 drop sus_doc
 drop tag
+*/
+
+drop if event_time <= 5
+		// eliminates graduation dates occuring before residency (avg of 4 years)
 
 
 	*******************************************************
