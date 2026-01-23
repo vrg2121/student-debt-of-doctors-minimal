@@ -27,11 +27,6 @@ keep if ResidenceStatus == "Resident"
 
 * To replicate Emiel:
 keep if CostType == "Tuition"
-
-* Health insurance included from 2002:
-// keep if ///
-// 	(aca_year <  2002 & CostType == "Tuition and Fees") | ///
-// 	(aca_year >= 2002 & CostType == "Tuition, Fees, and Health Insurance")
 	
 * Question: or calculate Tuition + Fees from rows so all years are the same?
 
@@ -54,16 +49,6 @@ label define public 0 "Private" 1 "Public"
 label values PublicSchool public
 
 keep med_school tuition aca_year PublicSchool
-
-* Deprecated:
-// * Only care about selected schools:
-//    merge m:1 med_school using "$working_data/temp/old-important-files/aamc-schools-nr-obs"
-// // keep if _merge == 3
-//    drop if _merge == 2
-//    drop _merge
-
-* Deprecated:
-// keep if our_nr_obs > $min_nr_obs // filtering
 
 g source = "aamc"
 
@@ -156,7 +141,7 @@ save "$working_data/temp/pre-aamc-tuition", replace
 
 *** COMBINED AAMC/IPEDS PANEL ***
 
-   use          "$working_data/temp/pre-aamc-tuition", clear
+use          "$working_data/temp/pre-aamc-tuition", clear
 // append using "$working_data/temp/pre-ipeds-tuition"
 
 label var aca_year "Academic year (e.g. academic year 2000-2001 -> aca_year = 2000)"
@@ -191,6 +176,7 @@ drop    drop
 * Mark where chronological order is respected:
 bys med_school (aca_year) : g med_school_chrono = aca_year[_n] == aca_year[_n - 1] + 1 if _n > 1
 
+
 * Delta tuition:
 foreach var in nominal_tuition tuition {
 	
@@ -210,6 +196,18 @@ foreach var in nominal_tuition tuition {
 			med_school_chrono[_n - 0] == 1
 	
 }
+
+* idenfity unusual gaps in tuition in the raw data
+sum delta_nominal_tuition, detail
+local xtralg = r(p99)
+local xtrasm = r(p1)
+
+g extreme_delta = 1 if delta_nominal_tuition > `xtralg' | delta_nominal_tuition < `xtrasm'
+replace extreme_delta = . if delta_nominal_tuition == .
+
+export delimited "$working_data/temp/nominal_tuition_checks.csv", replace
+
+drop extreme_delta
 
 * Defining tuition quantile:
 egen Tuition_quantile = xtile(tuition), n(4) by(aca_year) // ssc install egenmore
