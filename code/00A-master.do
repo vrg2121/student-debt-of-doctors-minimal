@@ -58,10 +58,14 @@ global do ///
 	"$git/code"
 	
 global tables ///
-	"$git/tables"
+	"$git/results/tables"
 	
 global figures ///
-	"$git/figures"
+	"$git/results/figures"
+	
+global batch ///
+	"$working_data/batch"
+
 	
 
 * This folder is important, do not erase:
@@ -96,14 +100,14 @@ do "$do/03A-create-propublica-outcomes.do" // calculate ProPublica outcomes
 do "$do/04A-create-doctor-panel.do" // standardize yearly CMS characteristics files
 do "$do/04B-create-doctor-panel.do" // append standardized files to create the doctor panel
 
-
 * 05 – Create key between AAMC and CMS school names:
-do "$do/05A-create-aamc-cms-key.do" // DONE: fix name issues in AAMC tuition files
-do "$do/05B-create-aamc-cms-key.do" // DONE: create key between AAMC and CMS names
+do "$do/05A-create-aamc-cms-key.do" // fix name issues in AAMC tuition files
+do "$do/05B-create-aamc-cms-key.do" // standardize AAMC and CMS names
 // there is no crosswalk file, modifications to the data are made directly in stata
 
 * 06 – Create tuition panel for school:
 do "$do/06A-create-school-panel.do" // create school panel
+// drops missing data for CA schools
 
 * 07 – Define Large
 do "$do/07A-define-large.do" // define a large change in tuition using AAMC data
@@ -113,6 +117,7 @@ do "$do/08A-merge-doctor-panel.do" // changes from key here
 
 * 09 – Merge CMS and AAMC Data
 do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on med school name; analysis of unmatched data 
+do "$do/09B-cohort-reshape.do" // reshape cohort, must be done
 
 * 10 – Regressions without HCPCS
 do "$do/10A-regressions.do" // outputs regression tables
@@ -147,7 +152,7 @@ do "$do/11C-hcpcs-regressions.do" // regressions with hcpcs FE
 
 
 * 12 – Summary Statistics / Data Exploration
-do "$do/12A-sumstat-tables.do" // work in progress
+do "$do/12B-stat-figures.do" // work in progress
 
 
 

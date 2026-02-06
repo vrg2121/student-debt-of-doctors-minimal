@@ -35,7 +35,7 @@ replace ReportedCost = subinstr(ReportedCost, "$", "", .)
 replace ReportedCost = subinstr(ReportedCost, ",", "", .)
 
 * Make ReportedCost integer:
-destring ReportedCost, replace // check why long and not int?
+destring ReportedCost, replace 
 
 rename ReportedCost tuition
 
@@ -51,6 +51,16 @@ label values PublicSchool public
 keep med_school tuition aca_year PublicSchool
 
 g source = "aamc"
+
+* replace false zeros with missing
+
+replace tuition = . if (tuition == 0 & aca_year <= 2011)
+replace tuition = . if (med_school == "west virginia university school of medicine" & inlist(aca_year, 2011, 2012))
+// university of california school, davis / irvine / los angeles / san diego / san francisco are missing data
+
+* replace known incorrect tuition with missing
+replace tuition = . if (med_school == "university of washington school of medicine" & inlist(aca_year, 2022, 2023, 2024))
+// data does not match university reports: https://uw-s3-cdn.s3.us-west-2.amazonaws.com/wp-content/uploads/sites/162/2022/06/10092854/2022-23TriCampusAnnualTuitionAndFee.pdf 
 
 save "$working_data/temp/pre-aamc-tuition", replace
 
@@ -163,14 +173,15 @@ order med_school aca_year
 bys med_school (aca_year) : g drop = _N == 1
 
 drop if drop == 1
-drop    drop
+drop    drop // drops 1 school
 
+drop if tuition == . // drops 85 observations
 assert tuition != .
 
 * Drop if tuition is constantly 0:
 bys med_school (tuition) : g drop = tuition[1] == 0 & tuition[1] == tuition[_N]
 
-drop if drop == 1
+drop if drop == 1 // drop 11 observation
 drop    drop
 
 * Mark where chronological order is respected:
