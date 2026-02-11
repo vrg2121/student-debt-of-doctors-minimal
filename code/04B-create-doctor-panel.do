@@ -184,8 +184,9 @@ drop sus_doc
 drop tag
 */
 
-drop if event_time <= 5
-		// eliminates graduation dates occuring before residency (avg of 4 years)
+drop if event_time <= 4 
+		// eliminates graduation dates occuring before residency could be completed (avg of 4 years)
+		// 308,993 observations deleted
 
 
 	*******************************************************
