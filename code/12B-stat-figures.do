@@ -23,9 +23,9 @@ sum shock_year
 local min = r(min)
 local max = r(max)
 
-twoway bar abs_lg_delta shock_year, xlabel(`min'(2)`max')title("Schools with Large Tuition Shocks Over Time") ytitle("Number of Schools") xtitle("Shock Year") note("Schools with large tuition shocks observed in combined CMS-AAMC data.")
+twoway bar abs_lg_delta shock_year, xlabel(`min'(2)`max') ytitle("Number of Schools") xtitle("Shock Year") note("Schools with large tuition shocks observed in combined CMS-AAMC data.")
 
-graph export "$figures/freq_tuition_shocks.png", width(800) height(600) replace
+graph export "$figures/school_tuition_shocks.png", width(800) height(600) replace
 
 
 **# How Many Doctors per Grad Year
@@ -218,6 +218,81 @@ graph twoway hist spread, freq bin(10) fc(none) lc(green) xline(`m') xline(`med'
 
 graph export "$figures/tuition_spread_nonzero.png", width(800) height(600) replace
 
+**# CDF of Tuition Spread by Cohorts
+use "$working_data/cms_aamc_cohort_id.dta", clear
+
+drop if med_school == "medical university of south carolina college of medicine" // incorrect tuition data
+
+sort npi
+egen tag = tag(npi)
+keep if tag == 1
+
+keep tuition_bill cohort_id med_school grad_year
+
+bysort cohort_id: egen max_tbill = max(tuition_bill)
+bysort cohort_id: egen min_tbill = min(tuition_bill)
+g spread = max_tbill - min_tbill
+label variable spread "Tuition Spread (Thousands)"
+
+sort cohort_id
+egen tag = tag(cohort_id)
+keep if tag == 1
+drop tag
+
+cumul spread, gen(c)
+sort c
+replace c = c * 100
+label variable c "% of Cohorts"
+
+line c spread
+
+graph export "$figures/cdf_spread_cohorts.png", width(800) height(600) replace
+
+
+**# CDF of Tuition Spread by Doc within Cohort
+use "$working_data/cms_aamc_cohort_id.dta", clear
+
+drop if med_school == "medical university of south carolina college of medicine" // incorrect tuition data
+
+sort npi
+egen tag = tag(npi)
+keep if tag == 1
+
+keep tuition_bill cohort_id med_school grad_year
+
+bysort cohort_id: egen max_tbill = max(tuition_bill)
+bysort cohort_id: egen min_tbill = min(tuition_bill)
+g spread = max_tbill - min_tbill
+label variable spread "Tuition Spread (Thousands)"
+
+bysort cohort_id : egen cdoc = count(cohort_id)
+
+sort cohort_id
+egen tag = tag(cohort_id)
+keep if tag == 1
+drop tag
+
+egen tdoc = total(cdoc)
+g pdoc = (cdoc / tdoc) * 100
+
+sort spread pdoc
+
+g cu_pdoc = sum(pdoc)
+label variable cu_pdoc "% of Doctors within Cohorts"
+
+line cu_pdoc spread
+
+graph export "$figures/cdf_spread_doctors.png", width(800) height(600) replace
+
+// do this manually instead
+cumul spread, g(cu)
+replace cu = cu * 100
+sort cu
+label variable cu "% of Doctors"
+
+line cu spread, title("CDF of Tuition Spread by Doctors")
+
+graph export "$figures/cdf_spread_doctors.png", width(800) height(600) replace
 
 **# How many doctors per center-year (evaluate group-pac FE)
 use "$working_data/cms_aamc_merge_identifier", clear

@@ -1,0 +1,29 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
+\hline
+Tuition bill (USD 1,000)&   -0.000249         &  -0.0000351         &  -0.0000725         &  -0.0000531         \\
+                    &  (0.000519)         &  (0.000441)         &  (0.000412)         &  (0.000450)         \\
+[1em]
+Cohort-Year FE      &         Yes         &         Yes         &         Yes         &         Yes         \\
+[1em]
+Career Time FE      &         Yes         &         Yes         &         Yes         &          No         \\
+[1em]
+Specialization-Year FE&          No         &         Yes         &         Yes         &         Yes         \\
+[1em]
+HRR-Year FE         &          No         &          No         &         Yes         &         Yes         \\
+[1em]
+Career Time-Year FE &          No         &          No         &          No         &         Yes         \\
+\hline
+Observations (doctor-years)&     521,472         &     521,435         &     518,172         &     518,172         \\
+Doctors             &     144,584         &     144,577         &     143,741         &     143,741         \\
+Clusters            &         123         &         123         &         123         &         123         \\
+Mean                &       0.437         &       0.437         &       0.435         &       0.435         \\
+Coef.\ \% of Mean   &        -0.1         &        -0.0         &        -0.0         &        -0.0         \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+}
