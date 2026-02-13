@@ -126,28 +126,6 @@ merge m:1 zip5 using "$dropbox/FullData/zip_hrr"
 drop if _merge == 2
 drop    _merge
 
-
-/*
-
-* REPLACE BELOW WITH NEW KEY WHEN FIXED!
-
-* Merge in AAMC school name using the CMS-AAMC school name key:
-merge m:1 our_med_school using "$working_data/temp/old-important-files/key-our-aamc", keepusing(med_school) // REPLACE!
-drop if _merge == 2
-drop _merge
-
-* Merge in tuition etc:
-g aca_year = grad_year - 1 // graduation year 2001 corresponds to academic year 2000-2001
-
-merge m:1 med_school aca_year using "$working_data/temp/aamc-tuition", ///
-	keepusing(PublicSchool *tuition_bill *_school source)
-drop if _merge == 2
-drop _merge
-
-rename aca_year aca_grad_year
-
-*/
-
 *** LABEL VARIABLES ***
 
 label var fg_sel1_total_payments "Payments: FG Code Selection (USD 1,000)"

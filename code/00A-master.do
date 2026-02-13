@@ -110,7 +110,7 @@ do "$do/06A-create-school-panel.do" // create school panel
 // drops missing data for CA schools
 
 * 07 – Define Large
-do "$do/07A-define-large.do" // define a large change in tuition using AAMC data
+do "$do/07A-define-cohorts.do" // define a large change in tuition using AAMC data
 
 * 08 – Merge outcomes and tuition into the doctor panel:
 do "$do/08A-merge-doctor-panel.do" // changes from key here

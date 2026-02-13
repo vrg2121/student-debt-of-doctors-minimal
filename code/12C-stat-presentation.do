@@ -4,30 +4,61 @@
 
 * doctor billing data *
 
-use "$working_data/panels/cms-panel", clear
+use "$working_data/cms_aamc_cohort_id.dta", clear
 
 egen tag = tag(npi)
-sum tag
+quietly sum tag
 display "Number of doctors: `r(sum)'"
 drop tag
 
-sum year
+quietly sum year
 display "Sample period for billing data: `r(min)' - `r(max)'"
 
 egen tag = tag(npi year)
-sum tag
+quietly sum tag
 display "Number of doctor-year observations: `r(sum)'"
 drop tag
 
 sort groupPAC
 g tag = 1 if groupPAC != ""
-sum tag
+quietly sum tag
 display "Data includes identifier for medical center in which doctor works: `r(sum)'"
+drop tag
 
-sum no_pay_ever
-local diff = r(N) - r(sum)
-display "Includes granular identifier for the type of each procedure being billed to Medicare: `diff'"
+egen tag = tag(groupPAC)
+quietly sum tag
+display "Number of medical centers: `r(sum)'"
+drop tag
 
+sort hrr
+g tag = 1 if hrr != .
+quietly sum tag
+display "Data includes indentifier for hospital referral regions in which doctor works: `r(sum)'"
+drop tag
+
+egen tag = tag(hrr)
+quietly sum tag
+display "Number of hospital referral regions: `r(sum)'"
+drop tag
+
+g tag = 0
+foreach code in avg_mdcr* {
+	quietly sum(`code')
+	replace tag = 1 if `r(max)' != 0
+}
+quietly sum tag
+display "Includes procedure identifier billed to Medicare: `r(sum)'"
+drop tag
+
+g tag = 1 if phySpec_id != .
+quietly sum tag
+display "Includes identifier for specialization: `r(sum)'"
+drop tag
+
+egen tag = tag(phySpec_id)
+quietly sum tag
+display "Number of specializations: `r(sum)'"
+drop tag
 
 
 * tuition data *
