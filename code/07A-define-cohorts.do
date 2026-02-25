@@ -23,8 +23,9 @@ Victoria Garcia
 *** DEFINE LARGE TUITION INCREASE ***
 
 global abs_large = 2 // absolute change of real tuition in thousands
+global tbill_lg = 4 // absolute change of real tuition bill in thousands
 
-global rel_large = 7 // relative change of real tuition in %
+//global rel_large = 7 // relative change of real tuition in %
 
 
 *** Reviewing the Data ***
@@ -65,12 +66,17 @@ use "$working_data/panels/aamc-tuition", clear
 
 */
 
+*** Large Tuition Bill Delta ***
+g delta_tuition_bill = tuition_bill[_n] - tuition_bill[_n - 1]
+g lg_tuition_delta = 1 if abs(delta_tuition_bill) >= $tbill_lg
+replace lg_tuition_delta = . if missing(delta_tuition_bill)
+label variable lg_tuition_delta "Large absolute change in tuition bill, delta_tuition_bill >= $tbill_lg"
+
 *** Absolute Value of Large Tuition Delta ***
 
-g abs_lg_delta = 1 if delta_tuition >= $abs_large
+g abs_lg_delta = 1 if abs(delta_tuition) >= $abs_large
 replace abs_lg_delta = . if missing(delta_tuition)
 label variable abs_lg_delta "Large absolute change in real tuition, delta_tuition >= $abs_large"
-
 
 /* ALTERNATIVE DEFINITIONS OF LARGE
 
@@ -185,6 +191,9 @@ by school_id : g new_cohort = 1 if abs_lg_delta == 1 // CHANGE DEF OF LARGE HERE
 replace cohort_reason = "tuition-change" if new_cohort == 1
 replace new_cohort = 1 if obsnum == 1 // new cohort marker begins with new school
 replace cohort_reason = "first-yr-data" if new_cohort == 1 & obsnum == 1
+replace new_cohort = 1 if lg_tuition_delta == 1
+replace cohort_reason = "tuition-bill-change" if lg_tuition_delta == 1
+
 
 global base_yr = .
 global tot = _N

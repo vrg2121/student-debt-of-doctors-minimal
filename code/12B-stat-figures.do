@@ -8,24 +8,41 @@ Statistical Analysis of Merged Data
 
 use "$working_data/cms_aamc_merge_identifier.dta", clear
 
-keep med_school grad_year abs_lg_delta
+keep med_school grad_year abs_lg_delta lg_tuition_delta
 
 sort med_school grad_year
 by med_school grad_year : gen obsnum = _n
 keep if obsnum == 1
 
-collapse (sum) abs_lg_delta, by(grad_year)
+collapse (sum) abs_lg_delta lg_tuition_delta, by(grad_year)
 
-drop if abs_lg_delta == 0
+drop if abs_lg_delta == 0 & lg_tuition_delta == 0
+
+g lg_delta = abs_lg_delta + lg_tuition_delta
 
 g shock_year = grad_year - 1
 sum shock_year
 local min = r(min)
 local max = r(max)
 
-twoway bar abs_lg_delta shock_year, xlabel(`min'(2)`max') ytitle("Number of Schools") xtitle("Shock Year") note("Schools with large tuition shocks observed in combined CMS-AAMC data.")
+twoway bar lg_delta shock_year, xlabel(, alternate) ytitle("Number of Schools") xtitle("Shock Year") note("Schools with large tuition shocks or large tuition bill shocks observed in combined CMS-AAMC data.")
+
+graph export "$figures/school_tuition_shocks_all.png", width(800) height(600) replace
+
+preserve
+
+keep if lg_tuition_delta != 0
+twoway bar lg_tuition_delta shock_year, xlabel(, alternate) ytitle("Number of Schools") xtitle("Shock Year") note("Schools with large tuition bill shocks observed in combined CMS-AAMC data.")
+graph export "$figures/school_tuition_bill_shocks.png", width(800) height(600) replace
+
+restore
+
+keep if abs_lg_delta != 0
+
+twoway bar abs_lg_delta shock_year, xlabel(, alternate) ytitle("Number of Schools") xtitle("Shock Year") note("Schools with large tuition shocks observed in combined CMS-AAMC data.")
 
 graph export "$figures/school_tuition_shocks.png", width(800) height(600) replace
+
 
 
 **# How Many Doctors per Grad Year
@@ -218,7 +235,7 @@ graph twoway hist spread, freq bin(10) fc(none) lc(green) xline(`m') xline(`med'
 
 graph export "$figures/tuition_spread_nonzero.png", width(800) height(600) replace
 
-**# CDF of Tuition Spread by Cohorts
+**# CDF of Tuition Spread
 use "$working_data/cms_aamc_cohort_id.dta", clear
 
 drop if med_school == "medical university of south carolina college of medicine" // incorrect tuition data
@@ -238,6 +255,10 @@ sort cohort_id
 egen tag = tag(cohort_id)
 keep if tag == 1
 drop tag
+
+** By Cohort **
+
+preserve 
 
 cumul spread, gen(c)
 sort c
@@ -248,29 +269,25 @@ line c spread
 
 graph export "$figures/cdf_spread_cohorts.png", width(800) height(600) replace
 
+keep if spread > 1 // tuition spread > $1000 USD2014
 
-**# CDF of Tuition Spread by Doc within Cohort
-use "$working_data/cms_aamc_cohort_id.dta", clear
+drop c 
 
-drop if med_school == "medical university of south carolina college of medicine" // incorrect tuition data
+cumul spread, gen(c)
+sort c
+replace c = c * 100
+label variable c "% of Cohorts"
 
-sort npi
-egen tag = tag(npi)
-keep if tag == 1
+line c spread
+graph export "$figures/cdf_spread_cohorts_variation.png", width(800) height(600) replace
 
-keep tuition_bill cohort_id med_school grad_year
+restore
 
-bysort cohort_id: egen max_tbill = max(tuition_bill)
-bysort cohort_id: egen min_tbill = min(tuition_bill)
-g spread = max_tbill - min_tbill
-label variable spread "Tuition Spread (Thousands)"
+
+** By Doc within Cohort **
+preserve
 
 bysort cohort_id : egen cdoc = count(cohort_id)
-
-sort cohort_id
-egen tag = tag(cohort_id)
-keep if tag == 1
-drop tag
 
 egen tdoc = total(cdoc)
 g pdoc = (cdoc / tdoc) * 100
@@ -284,15 +301,23 @@ line cu_pdoc spread
 
 graph export "$figures/cdf_spread_doctors.png", width(800) height(600) replace
 
-// do this manually instead
-cumul spread, g(cu)
-replace cu = cu * 100
-sort cu
-label variable cu "% of Doctors"
+drop tdoc pdoc cu_pdoc
 
-line cu spread, title("CDF of Tuition Spread by Doctors")
+keep if spread > 1 // tuition spread > $1000 USD2014
 
-graph export "$figures/cdf_spread_doctors.png", width(800) height(600) replace
+egen tdoc = total(cdoc)
+g pdoc = (cdoc / tdoc) * 100
+
+sort spread pdoc
+
+g cu_pdoc = sum(pdoc)
+label variable cu_pdoc "% of Doctors within Cohorts"
+
+line cu_pdoc spread
+
+graph export "$figures/cdf_spread_doctors_variation.png", width(800) height(600) replace
+
+
 
 **# How many doctors per center-year (evaluate group-pac FE)
 use "$working_data/cms_aamc_merge_identifier", clear
@@ -382,7 +407,7 @@ local cut = `nf' + 1
 keep if doc_pac > `cut'
 
 drop tag
-egen tag = tag(ngroupPAC grad_year)
+egen tag = tag(ngroupPAC year)
 quietly sum tag
 
 local tot_doc = r(sum)

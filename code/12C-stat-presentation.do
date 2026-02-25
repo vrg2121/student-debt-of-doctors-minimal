@@ -66,11 +66,11 @@ drop tag
 use "$working_data/panels/aamc-tuition", clear
 
 egen tag = tag(med_school)
-sum tag
+quietly sum tag
 display "Number of schools: `r(sum)'"
 drop tag
 
-sum aca_year
+quietly sum aca_year
 display "Sample period for medical school data: `r(min)' - `r(max)'"
 
 egen tag = tag(med_school aca_year)
@@ -101,9 +101,9 @@ egen n_cohort_school = count(cohort_id), by(med_school)
 quietly sum(n_cohort_school), d
 display "Number of cohorts per school: `r(p50)' (median), `r(mean)' (mean)"
 
-graph pie, over(cohort_reason) sort descending legend(off) plabel(_all percent, color(black) size(medium) format(%9.1f)) plabel(1 name, color(black) size(medium) gap(28)) plabel(2 name, color(black) size(medium) gap(28)) plabel(3 name, color(black) size(medium) gap(24))
+graph pie, over(cohort_reason) sort descending legend(off) plabel(_all percent, color(black) size(medium) format(%9.1f)) plabel(1 name, color(black) size(medium) gap(32)) plabel(2 name, color(black) size(medium) gap(21)) plabel(3 name, color(black) size(medium) gap(26)) plabel(4 name, color(black) size(medium) gap(20))
 
-graph export "$figures/cohort_reset_reason.png", replace
+graph export "$figures/cohort_reset_reason.png", width(976) height(600) replace
 
 restore
 
