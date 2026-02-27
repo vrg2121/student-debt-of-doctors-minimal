@@ -20,7 +20,6 @@ merge 1:m med_school grad_year using "$working_data/panels/cms-panel"
 keep if _merge==3
 drop _merge
 									
-
 egen id = group(year npi)
 label variable id "doctor-year identifier"
 

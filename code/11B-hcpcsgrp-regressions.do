@@ -1,0 +1,103 @@
+*******************************************
+*** DOCTOR-YEAR-HCPCS GROUP REGRESSIONS ***
+*******************************************
+
+* Description of this do-file:
+
+* 	Regressions with hcpcs group fixed effects
+
+*****************************************
+*****************************************
+*****************************************
+
+use "$working_data/cms_aamc_hcpcsgrp_id", clear
+
+global outcome "tot_em_pymt avg_mdcr_pymt_amt nsrvcs"
+
+
+*** All Cohorts ***
+
+foreach oc of global outcome {
+	
+	eststo clear
+
+	
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id#year phySpec_id#year hrr#year hcpcsgroup#year) vce(cluster school_id)
+
+	** Mean:
+	sum `oc' if e(sample) == 1
+	estadd r(mean)
+
+	scalar pct_mean = 100 * _b[tuition_bill] / r(mean)
+	estadd scalar pct_mean
+
+	** Unique doctors
+	unique npi if e(sample) == 1
+	estadd scalar unique_drs = r(unique)
+
+	** unique schools
+	unique med_school if e(sample) == 1
+	estadd scalar unique_schools = r(unique)
+
+	* format output
+
+	esttab est*, keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label
+	estfe . est*, labels(cohort_id#year "Cohort-Year FE" phySpec_id#year "Specialization-Year FE" hrr#year "HRR-Year FE" time_since_grad_id#year "Career Time-Year FE" hcpcsgroup#year "HCPCS Group-Year FE")						
+		
+	esttab est* using "$tables/fe-regs-hcpcsgrp-`oc'.tex", ///
+		keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
+		indicate(`r(indicate_fe)') nomtitles ///
+		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1) labels("Observations (doctor-year-hcpcsgroup)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef.\ \% of Mean")) ///
+		replace
+}
+
+
+
+*** Cohorts with Variation (Tuition Spread > $1000 USD2014) ***
+
+use "$working_data/cms_aamc_hcpcsgrp_id", clear
+
+drop if med_school == "medical university of south carolina college of medicine" // incorrect tuition data
+
+bysort cohort_id: egen max_tbill = max(tuition_bill)
+bysort cohort_id: egen min_tbill = min(tuition_bill)
+g spread = max_tbill - min_tbill
+label variable spread "Tuition Bill Spread (Thousands)"
+
+keep if spread > 1 // keep if tuition bill spread > $1000
+// 1,119,538 / 2,261,032 = ~50% of observations deleted 
+
+foreach oc of global outcome {
+	
+	eststo clear
+
+	
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id#year phySpec_id#year hrr#year hcpcsgroup#year) vce(cluster school_id)
+
+	** Mean:
+	sum `oc' if e(sample) == 1
+	estadd r(mean)
+
+	scalar pct_mean = 100 * _b[tuition_bill] / r(mean)
+	estadd scalar pct_mean
+
+	** Unique doctors
+	unique npi if e(sample) == 1
+	estadd scalar unique_drs = r(unique)
+
+	** unique schools
+	unique med_school if e(sample) == 1
+	estadd scalar unique_schools = r(unique)
+
+	* format output
+
+	esttab est*, keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label
+	estfe . est*, labels(cohort_id#year "Cohort-Year FE" phySpec_id#year "Specialization-Year FE" hrr#year "HRR-Year FE" time_since_grad_id#year "Career Time-Year FE" hcpcsgroup#year "HCPCS Group-Year FE")						
+		
+	esttab est* using "$tables/variation-fe-regs-hcpcsgrp-`oc'.tex", ///
+		keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
+		indicate(`r(indicate_fe)') nomtitles ///
+		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1) labels("Observations (doctor-years)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef.\ \% of Mean")) ///
+		replace
+}
+

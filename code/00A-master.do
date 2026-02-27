@@ -122,6 +122,11 @@ do "$do/09B-cohort-reshape.do" // reshape cohort, must be done
 * 10 – Regressions without HCPCS
 do "$do/10A-regressions.do" // outputs regression tables
 
+* 11 – Regressions by HCPCS Group
+do "$do/11A-create-hcpcsgrp-panel.do" // creates doctor-year-hcpcsgroup level data-mangement
+do "$do/11B-hcpcsgroup-regressions.do" // hcpcsgroup level regressions
+
+
 
 /* HCPCS REGRESSIONS
 
