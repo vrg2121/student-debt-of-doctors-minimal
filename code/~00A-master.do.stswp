@@ -123,37 +123,12 @@ do "$do/09B-cohort-reshape.do" // reshape cohort, must be done
 do "$do/10A-regressions.do" // outputs regression tables
 
 * 11 – Regressions by HCPCS Group
-do "$do/11A-create-hcpcsgrp-panel.do" // creates doctor-year-hcpcsgroup level data-mangement
+do "$do/11A-hcpcsgroup-regressions.do" // creates doctor-year-hcpcsgroup level data-mangement
 do "$do/11B-hcpcsgroup-regressions.do" // hcpcsgroup level regressions
 
 
 
-/* HCPCS REGRESSIONS
 
-These files are intended to be run with an M4 or above chip overnight.
-
-Alternatively run as a batch job on a computer with at least 16 CPUs and 60 GB of RAM.
-
-Estimated walltime: 6 hours
-
-Data to be uploaded to cluster: cms_aamc_merge_indentifier.dta
-Data to be downloaded from cluster: cms_aamc_id_hcpcs.dta (160G+)
-Tables to be downloaded from cluster: fe-regs-hcpcs-avg_mdcr_pymt_amt.tex, revamp-fe-regs-hcpcs-avg_mdcr_pymt_amt.tex
-
-Assumed project structure:
-Batch
-|_ data -- upload data here
-	|_ hcpcs -- some data will be placed here
-|_ tables -- tables will be placed here
-*/
-
-/*
-* 11 – Regressions with HCPCS
-global batch 
-do "$do/11A-partition-data.do" // splits data up by year and then 20ths
-do "$do/11B-hcpcs-disaggregation.do" // reshapes data by hcpcs, appends (6ish hours)
-do "$do/11C-hcpcs-regressions.do" // regressions with hcpcs FE
-*/
 
 
 * 12 – Summary Statistics / Data Exploration
