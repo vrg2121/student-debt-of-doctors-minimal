@@ -79,6 +79,7 @@ merge m:1 npi year using "$working_data/temp/cms-panel-clean-name"
 
 keep if _merge == 3
 drop _merge
+// 3,392,397 / 13,049,142 = keep 26% of em-hcpcsgrp data
 
 save "$working_data/panels/cms-hcpcsgrp-panel", replace
 

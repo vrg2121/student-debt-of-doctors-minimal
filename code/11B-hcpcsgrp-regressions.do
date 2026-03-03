@@ -97,7 +97,7 @@ foreach oc of global outcome {
 	esttab est* using "$tables/variation-fe-regs-hcpcsgrp-`oc'.tex", ///
 		keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
 		indicate(`r(indicate_fe)') nomtitles ///
-		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1) labels("Observations (doctor-years)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef.\ \% of Mean")) ///
+		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1) labels("Observations (doctor-years-hcpcsgroup)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef.\ \% of Mean")) ///
 		replace
 }
 

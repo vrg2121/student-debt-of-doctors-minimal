@@ -120,19 +120,18 @@ do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on med school na
 do "$do/09B-cohort-reshape.do" // reshape cohort, must be done
 
 * 10 – Regressions without HCPCS
-do "$do/10A-regressions.do" // outputs regression tables
+do "$do/10A-regressions.do" // outputs regression tables for all outcome variables
+
 
 * 11 – Regressions by HCPCS Group
 do "$do/11A-hcpcsgroup-regressions.do" // creates doctor-year-hcpcsgroup level data-mangement
 do "$do/11B-hcpcsgroup-regressions.do" // hcpcsgroup level regressions
 
+* 12 – Regressions by E/M vs Non-E/M Outcomes
 
 
-
-
-
-* 12 – Summary Statistics / Data Exploration
-do "$do/12B-stat-figures.do" // work in progress
+* 13 – Summary Statistics / Data Exploration
+do "$do/13B-stat-figures.do" 
 
 
 
