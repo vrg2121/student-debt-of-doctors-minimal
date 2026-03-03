@@ -51,6 +51,8 @@ forvalues n = 12/19 {
 
 	* Compute total amount paid per HCPCS code and doctor:
 	collapse (sum) all_total_payments amount_services (max) isDrug, by(npi isEM)
+	
+	g year = 2000 + `n'
 
 	
 	save "$working_data/temp/all_total_payments-em-grps-20`n'", replace
@@ -70,4 +72,4 @@ forvalues n = 12/19 {
 inflationAdjust all_total_payments year
 	
 
-save "$working_data/tempall_total_payments-em-grps", replace
+save "$working_data/temp/all_total_payments-em-grps", replace
