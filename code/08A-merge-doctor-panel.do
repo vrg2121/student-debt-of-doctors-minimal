@@ -8,7 +8,6 @@
 * 	Merges in outcomes from CMS and ProPublica
 
 * 	Merges in AAMC school name using the CMS-AAMC school name key, and then school-level variables
-*		NOTE --- CURRENTLY USES OLD KEY!
 
 * 	Labels variables and makes final selection of calendar years and doctor population (MDs)
 
@@ -37,18 +36,20 @@ drop    _merge
 assert ent_cd != "O"
 
 * Replace missings with zeros based on payment data limits:
+/*
 foreach var of global payment_vars {
 	
 	replace `var'_total_payments =  0 ///
 		 if `var'_total_payments == . & inrange(year, 2012, 2019)
 	
 }
+*/
 
 * Average evaluation and management codes (E/M) payments:
-merge 1:1 npi year using "$working_data/temp/em-average-payments"
+/*merge 1:1 npi year using "$working_data/temp/em-average-payments"
 drop if _merge == 2
 drop    _merge
-
+*/
 
 *** MERGE IN CMS TOTAL NUMBER OF SERVICES AND UNIQUE SERVICES ***
 

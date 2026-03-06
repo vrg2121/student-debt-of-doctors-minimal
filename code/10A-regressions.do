@@ -54,10 +54,32 @@ foreach oc of global outcome {
 	eststo clear
 
 	
-	* row 4: replace, time since graduation and event time
+	* row 1: Specialization#Career Time#Year
 	
 	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year phySpec_id#time_since_grad_id#year hrr#year) vce(cluster school_id)
 
+	** Mean:
+	sum `oc' if e(sample) == 1
+	estadd r(mean)
+
+	scalar pct_mean = 100 * _b[tuition_bill] / r(mean)
+	estadd scalar pct_mean
+
+	** Unique doctors
+	unique npi if e(sample) == 1
+	estadd scalar unique_drs = r(unique)
+
+	** unique schools
+	unique med_school if e(sample) == 1
+	estadd scalar unique_schools = r(unique)
+	
+	** number of zeros
+	sum tag if e(sample) == 1
+	estadd scalar nzero = r(sum)
+	
+	* row 2: no controls for Specialization
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id#year hrr#year) vce(cluster school_id)
+	
 	** Mean:
 	sum `oc' if e(sample) == 1
 	estadd r(mean)
@@ -80,9 +102,9 @@ foreach oc of global outcome {
 	* format output
 
 	esttab est*, keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label
-	estfe . est*, labels(cohort_id#year "Cohort-Year FE" hrr#year "HRR-Year FE" phySpec_id#time_since_grad_id#year "Specialization-Career-Year FE")						
+	estfe . est*, labels(cohort_id#year "Cohort-Year FE" hrr#year "HRR-Year FE" phySpec_id#time_since_grad_id#year "Specialization-Career-Year FE" time_since_grad_id#year "Career-Year FE")						
 		
-	esttab est* using "$tables/newbaseline-fe-regs-`oc'.tex", ///
+	esttab est* using "$tables/nozero_newbaseline-fe-regs-`oc'.tex", ///
 		keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
 		indicate(`r(indicate_fe)') nomtitles ///
 		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean nzero, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1 %9.0fc) labels("Observations (doctor-years)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef.\ \% of Mean" "Zeroes")) ///

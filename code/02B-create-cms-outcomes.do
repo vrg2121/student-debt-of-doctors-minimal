@@ -102,9 +102,9 @@ forvalues n = 12/19 {
 	drop if _merge == 2
 	drop    _merge
 
-	replace isEM = isEM == 1
+	//replace isEM = isEM == "1"
 	
-	g fg_sel5_total_payments = all_total_payments if isEM == 1
+	g fg_sel5_total_payments = all_total_payments if isEM == "1"
 	
 	* Recall:
 	* 	        all_total_payments = includes everything
@@ -157,9 +157,14 @@ foreach var of global payment_vars {
 	
 }
 
+label variable fg_sel3_total_payments "CMS Payments"
+label variable fg_sel5_total_payments "CMS E/M Payments"
+
+drop if npi == 1 | npi == .
+
 save "$working_data/temp/emiel-total_payments-fg-hcpcs-codes", replace
 
-
+/*
 ***************************************************************
 *** YEARLY AVERAGE PAYMENTS PER HCPCS – ONLY FOR E/M CODES ***
 ***************************************************************
@@ -179,7 +184,7 @@ forvalues n = 12/19 {
 	drop if _merge == 2
 	drop    _merge
 
-	keep if isEM == 1
+	keep if isEM == "1"
 	
 	assert hcpcs != ""
 	
@@ -215,7 +220,7 @@ foreach var in `r(varlist)' {
 
 save "$working_data/temp/em-average-payments", replace
 
-
+*/
 ****************************************************
 *** TOTAL NUMBER OF SERVICES AND UNIQUE SERVICES ***
 ****************************************************
@@ -259,7 +264,7 @@ merge m:1 hcpcs using "$working_data/temp/hcpcs-isEM"
 drop if _merge == 2
 drop    _merge
 
-g fg_sel5 = isEM == 1
+g fg_sel5 = isEM == "1"
 
 drop isEM
 

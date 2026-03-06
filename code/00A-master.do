@@ -113,7 +113,7 @@ do "$do/06A-create-school-panel.do" // create school panel
 do "$do/07A-define-cohorts.do" // define a large change in tuition using AAMC data
 
 * 08 – Merge outcomes and tuition into the doctor panel:
-do "$do/08A-merge-doctor-panel.do" // changes from key here
+do "$do/08A-merge-doctor-panel.do" // standardized AAMC and CMS names applied here
 
 * 09 – Merge CMS and AAMC Data
 do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on med school name; analysis of unmatched data 
