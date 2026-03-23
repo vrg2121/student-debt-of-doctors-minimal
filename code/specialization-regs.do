@@ -9,7 +9,7 @@ bys npi : egen num_spec = nvals(phySpec)
 
 tab num_spec 
 
-drop if num_spec > 1 // 15% of observations deleted
+// drop if num_spec > 1 // 15% of observations deleted
 
 // generate dummy variables that correspond to label key
 

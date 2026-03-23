@@ -36,14 +36,14 @@ drop    _merge
 assert ent_cd != "O"
 
 * Replace missings with zeros based on payment data limits:
-/*
+
 foreach var of global payment_vars {
 	
 	replace `var'_total_payments =  0 ///
 		 if `var'_total_payments == . & inrange(year, 2012, 2019)
 	
 }
-*/
+
 
 * Average evaluation and management codes (E/M) payments:
 /*merge 1:1 npi year using "$working_data/temp/em-average-payments"
@@ -57,11 +57,12 @@ merge 1:1 npi year using "$working_data/temp/nCodes-new"
 drop if _merge == 2
 drop    _merge
 
+/*
 ds *nServ *nCode
 foreach var in `r(varlist)' {
 	replace `var' = 0 if `var' == . & inrange(year, 2012, 2019) // added!
 }
-
+*/
 
 *** MERGE IN ProPublica AND MODIFY SOME VARIABLES ***
 

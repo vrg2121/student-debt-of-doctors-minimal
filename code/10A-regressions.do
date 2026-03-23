@@ -35,7 +35,7 @@ global outcome "fg_sel3_total_payments fg_sel5_total_payments"
 
 
 *** BASELINE REGRESSIONS WITH TUITION BILL VARIATION ***
-use "$working_data/cms_aamc_cohort_id", clear
+use "$working_data/cms_aamc_cohort_id_nozeroes", clear
 
 drop if med_school == "medical university of south carolina college of medicine" // incorrect tuition data
 
