@@ -1,24 +1,25 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{1}{c}}
+\begin{tabular}{l*{3}{c}}
 \hline\hline
-                    &\multicolumn{1}{c}{(1)}         \\
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}\\
+                    &\multicolumn{1}{c}{One Spec}&\multicolumn{1}{c}{First Spec}&\multicolumn{1}{c}{Longest Spec}\\
 \hline
-Tuition bill (USD 1,000)&      -0.106         \\
-                    &    (0.0753)         \\
+Tuition bill (USD 1,000)&     -0.0402         &     -0.0483         &     -0.0604         \\
+                    &    (0.0690)         &    (0.0675)         &    (0.0685)         \\
 [1em]
-Cohort FE           &         Yes         \\
+Cohort FE           &         Yes         &         Yes         &         Yes         \\
 [1em]
-Year FE             &         Yes         \\
+Year FE             &         Yes         &         Yes         &         Yes         \\
 \hline
-Observations (doctor-year-em)&   1,102,184         \\
-Doctors             &     174,183         \\
-Clusters            &         139         \\
-Mean                &    -120.530         \\
-Coef. % of Mean     &         0.1         \\
-nzero               &         0.0         \\
+Observations (doctor-year)&   1,199,521         &   1,241,176         &   1,263,191         \\
+Doctors             &     186,652         &     198,225         &     198,225         \\
+Clusters            &       1,299         &       1,299         &       1,299         \\
+Mean                &    -121.374         &    -121.165         &    -121.145         \\
+Coef. \% of Mean    &         0.0         &         0.0         &         0.0         \\
+Zeros               &           0         &           0         &           0         \\
 \hline\hline
-\multicolumn{2}{l}{\footnotesize Standard errors in parentheses}\\
-\multicolumn{2}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\multicolumn{4}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{4}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
 \end{tabular}
 }

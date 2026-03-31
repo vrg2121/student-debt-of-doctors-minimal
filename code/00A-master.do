@@ -114,6 +114,7 @@ do "$do/07A-define-cohorts.do" // define a large change in tuition using AAMC da
 
 * 08 – Merge outcomes and tuition into the doctor panel:
 do "$do/08A-merge-doctor-panel.do" // standardized AAMC and CMS names applied here
+// missing previously imputed as zeros here
 
 * 09 – Merge CMS and AAMC Data
 do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on med school name; analysis of unmatched data 

@@ -1,28 +1,30 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{2}{c}}
+\begin{tabular}{l*{5}{c}}
 \hline\hline
-                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         \\
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         \\
 \hline
-Tuition bill (USD 1,000)&       0.456         &       0.525\sym{*}  \\
-                    &     (0.281)         &     (0.296)         \\
+Tuition bill (USD 1,000)&      -1.556\sym{***}&      -1.415\sym{***}&       0.525\sym{*}  &       0.427\sym{*}  &       0.456\sym{*}  \\
+                    &     (0.196)         &     (0.190)         &     (0.285)         &     (0.258)         &     (0.265)         \\
 [1em]
-Cohort-Year FE      &         Yes         &         Yes         \\
+Cohort-Year FE      &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         \\
 [1em]
-HRR-Year FE         &         Yes         &         Yes         \\
+HRR-Year FE         &          No         &         Yes         &         Yes         &         Yes         &         Yes         \\
 [1em]
-Specialization-Career-Year FE&         Yes         &          No         \\
+Career-Year FE      &          No         &          No         &         Yes         &         Yes         &          No         \\
 [1em]
-Career-Year FE      &          No         &         Yes         \\
+Specialization-Year FE&          No         &          No         &          No         &         Yes         &          No         \\
+[1em]
+Specialization-Career-Year FE&          No         &          No         &          No         &          No         &         Yes         \\
 \hline
-Observations (doctor-years)&     496,262         &     497,036         \\
-Doctors             &      88,785         &      88,896         \\
-Clusters            &         123         &         123         \\
-Mean                &      71.213         &      71.198         \\
-Coef.\ \% of Mean   &         0.6         &         0.7         \\
-Zeroes              &           1         &           1         \\
+Observations (doctor-years)&     500,586         &     497,036         &     497,036         &     496,986         &     496,262         \\
+Doctors             &      89,421         &      88,896         &      88,896         &      88,891         &      88,785         \\
+Clusters            &         426         &         426         &         426         &         426         &         425         \\
+Mean                &      70.877         &      71.198         &      71.198         &      71.204         &      71.213         \\
+Coef. \% of Mean    &        -2.2         &        -2.0         &         0.7         &         0.6         &         0.6         \\
+Zeroes              &           1         &           1         &           1         &           1         &           1         \\
 \hline\hline
-\multicolumn{3}{l}{\footnotesize Standard errors in parentheses}\\
-\multicolumn{3}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\multicolumn{6}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{6}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
 \end{tabular}
 }

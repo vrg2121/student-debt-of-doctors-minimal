@@ -50,7 +50,7 @@ foreach oc of global outcome {
 	eststo clear
 	
 	* row 1: baseline regression with cohort, event time and time since graduation *
-	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id) vce(cluster school_id)
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id) vce(cluster cohort_id)
 
 	* Mean:
 	sum `oc' if e(sample) == 1
@@ -73,7 +73,7 @@ foreach oc of global outcome {
 	
 	* row 2: add phySpec_id and event time FE
 
-	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id phySpec_id#year) vce(cluster school_id)
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id phySpec_id#year) vce(cluster cohort_id)
 
 	** Mean:
 	sum `oc' if e(sample) == 1
@@ -96,7 +96,7 @@ foreach oc of global outcome {
 	
 	* row 3: add referral region (HRR) and event time FE
 	
-	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id phySpec_id#year hrr#year) vce(cluster school_id)
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id phySpec_id#year hrr#year) vce(cluster cohort_id)
 
 	** Mean:
 	sum `oc' if e(sample) == 1
@@ -119,7 +119,7 @@ foreach oc of global outcome {
 	
 	* row 4: replace, time since graduation and event time
 	
-	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id#year phySpec_id#year hrr#year) vce(cluster school_id)
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id#year phySpec_id#year hrr#year) vce(cluster cohort_id)
 
 	** Mean:
 	sum `oc' if e(sample) == 1
@@ -175,7 +175,7 @@ foreach oc of global outcome {
 	eststo clear
 	
 	* row 1: baseline regression with cohort, event time and time since graduation *
-	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id) vce(cluster school_id)
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id) vce(cluster cohort_id)
 
 	* Mean:
 	sum `oc' if e(sample) == 1
@@ -194,7 +194,7 @@ foreach oc of global outcome {
 	
 	* row 2: add phySpec_id and event time FE
 
-	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id phySpec_id#year) vce(cluster school_id)
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id phySpec_id#year) vce(cluster cohort_id)
 
 	** Mean:
 	sum `oc' if e(sample) == 1
@@ -213,7 +213,7 @@ foreach oc of global outcome {
 	
 	* row 3: add referral region (HRR) and event time FE
 	
-	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id phySpec_id#year hrr#year) vce(cluster school_id)
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id phySpec_id#year hrr#year) vce(cluster cohort_id)
 
 	** Mean:
 	sum `oc' if e(sample) == 1
@@ -232,7 +232,7 @@ foreach oc of global outcome {
 	
 	* row 4: replace, time since graduation and event time
 	
-	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id#year phySpec_id#year hrr#year) vce(cluster school_id)
+	eststo : reghdfe `oc' tuition_bill, a(cohort_id#year time_since_grad_id#year phySpec_id#year hrr#year) vce(cluster cohort_id)
 
 	** Mean:
 	sum `oc' if e(sample) == 1

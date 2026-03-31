@@ -22,7 +22,7 @@ g tag = 1 if all_total_payments == 0
 eststo clear
 
 
-eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM hrr#year#isEM phySpec_id#year#isEM#time_since_grad_id) vce(cluster school_id)
+eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM hrr#year#isEM phySpec_id#year#isEM#time_since_grad_id) vce(cluster cohort_id)
 
 ** Mean:
 sum all_total_payments if e(sample) == 1
@@ -74,7 +74,7 @@ g tag = 1 if all_total_payments == 0
 
 eststo clear
 
-eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM hrr#year#isEM phySpec_id#year#isEM#time_since_grad_id) vce(cluster school_id)
+eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM hrr#year#isEM phySpec_id#year#isEM#time_since_grad_id) vce(cluster cohort_id)
 
 ** Mean:
 sum all_total_payments if e(sample) == 1

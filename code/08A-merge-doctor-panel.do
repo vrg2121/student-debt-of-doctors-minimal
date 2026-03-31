@@ -37,19 +37,20 @@ assert ent_cd != "O"
 
 * Replace missings with zeros based on payment data limits:
 
+/*
 foreach var of global payment_vars {
 	
 	replace `var'_total_payments =  0 ///
 		 if `var'_total_payments == . & inrange(year, 2012, 2019)
 	
 }
-
+*/
 
 * Average evaluation and management codes (E/M) payments:
-/*merge 1:1 npi year using "$working_data/temp/em-average-payments"
+merge 1:1 npi year using "$working_data/temp/em-average-payments"
 drop if _merge == 2
 drop    _merge
-*/
+
 
 *** MERGE IN CMS TOTAL NUMBER OF SERVICES AND UNIQUE SERVICES ***
 
@@ -97,7 +98,7 @@ drop _merge
 
 * Share of count that is from brand name drugs:
 g       pp_brand_per_ben =      brand_claim_count / ben_count if inrange(year, 2013, 2016)
-replace pp_brand_per_ben = 0 if brand_claim_count == . &         inrange(year, 2013, 2016)
+// replace pp_brand_per_ben = 0 if brand_claim_count == . &         inrange(year, 2013, 2016)
 
 rename p_brand     		  pp_p_brand
 rename p_opioid_benes     pp_p_opioid_benes
