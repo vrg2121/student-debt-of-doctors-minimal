@@ -1,28 +1,28 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{1}{c}}
+\begin{tabular}{l*{4}{c}}
 \hline\hline
-                    &\multicolumn{1}{c}{(1)}         \\
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
 \hline
-isEM=1 $\times$ Tuition bill (USD 1,000)&      -1.070\sym{*}  \\
-                    &     (0.631)         \\
+isEM=1 $\times$ Tuition bill (USD 1,000)&      -0.218\sym{***}&       1.296\sym{***}&       1.187\sym{***}&      -1.070\sym{*}  \\
+                    &    (0.0112)         &     (0.430)         &     (0.436)         &     (0.631)         \\
 [1em]
-Doctor-Year FE      &         Yes         \\
+Doctor-Year FE      &         Yes         &         Yes         &         Yes         &         Yes         \\
 [1em]
-Cohort-Year-EM FE   &         Yes         \\
+Cohort-Year-EM FE   &          No         &         Yes         &         Yes         &         Yes         \\
 [1em]
-Region-Year-EM FE   &         Yes         \\
+Region-Year-EM FE   &          No         &          No         &         Yes         &         Yes         \\
 [1em]
-Specialization-Year-EM-Career FE&         Yes         \\
+Specialization-Year-EM-Career FE&          No         &          No         &          No         &         Yes         \\
 \hline
-Observations (doctor-year-em)&     953,310         \\
-Doctors             &      95,168         \\
-Clusters            &       1,160         \\
-Mean                &      57.530         \\
-Coef. % of Mean     &        -1.9         \\
-nzero               &         1.0         \\
+Observations (doctor-year-em)&     960,150         &     959,382         &     954,968         &     953,310         \\
+Doctors             &      95,778         &      95,695         &      95,295         &      95,168         \\
+Clusters            &       1,228         &       1,169         &       1,166         &       1,160         \\
+Mean                &      57.345         &      57.364         &      57.525         &      57.530         \\
+Coef. % of Mean     &        -0.4         &         2.3         &         2.1         &        -1.9         \\
+nzero               &         1.0         &         1.0         &         1.0         &         1.0         \\
 \hline\hline
-\multicolumn{2}{l}{\footnotesize Standard errors in parentheses}\\
-\multicolumn{2}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
 \end{tabular}
 }

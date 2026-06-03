@@ -21,7 +21,73 @@ g tag = 1 if all_total_payments == 0
 
 eststo clear
 
+* column 1 *
+eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year) vce(cluster cohort_id)
 
+** Mean:
+sum all_total_payments if e(sample) == 1
+estadd r(mean)
+
+scalar pct_mean = 100 * _b[c.tuition_bill#1.isEM] / r(mean)
+estadd scalar pct_mean
+
+** Unique doctors
+unique npi if e(sample) == 1
+estadd scalar unique_drs = r(unique)
+
+** unique schools
+unique med_school if e(sample) == 1
+estadd scalar unique_schools = r(unique)
+
+** number of zeros
+sum tag if e(sample) == 1
+estadd scalar nzero = r(sum)
+
+* column 2 *
+eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM) vce(cluster cohort_id)
+
+** Mean:
+sum all_total_payments if e(sample) == 1
+estadd r(mean)
+
+scalar pct_mean = 100 * _b[c.tuition_bill#1.isEM] / r(mean)
+estadd scalar pct_mean
+
+** Unique doctors
+unique npi if e(sample) == 1
+estadd scalar unique_drs = r(unique)
+
+** unique schools
+unique med_school if e(sample) == 1
+estadd scalar unique_schools = r(unique)
+
+** number of zeros
+sum tag if e(sample) == 1
+estadd scalar nzero = r(sum)
+
+* column 3 *
+eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM hrr#year#isEM) vce(cluster cohort_id)
+
+** Mean:
+sum all_total_payments if e(sample) == 1
+estadd r(mean)
+
+scalar pct_mean = 100 * _b[c.tuition_bill#1.isEM] / r(mean)
+estadd scalar pct_mean
+
+** Unique doctors
+unique npi if e(sample) == 1
+estadd scalar unique_drs = r(unique)
+
+** unique schools
+unique med_school if e(sample) == 1
+estadd scalar unique_schools = r(unique)
+
+** number of zeros
+sum tag if e(sample) == 1
+estadd scalar nzero = r(sum)
+
+* column 4 *
 eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM hrr#year#isEM phySpec_id#year#isEM#time_since_grad_id) vce(cluster cohort_id)
 
 ** Mean:
@@ -42,6 +108,7 @@ estadd scalar unique_schools = r(unique)
 ** number of zeros
 sum tag if e(sample) == 1
 estadd scalar nzero = r(sum)
+
 
 * format output
 
@@ -74,6 +141,73 @@ g tag = 1 if all_total_payments == 0
 
 eststo clear
 
+* column 1 *
+eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year) vce(cluster cohort_id)
+
+** Mean:
+sum all_total_payments if e(sample) == 1
+estadd r(mean)
+
+scalar pct_mean = 100 * _b[c.tuition_bill#1.isEM] / r(mean)
+estadd scalar pct_mean
+
+** Unique doctors
+unique npi if e(sample) == 1
+estadd scalar unique_drs = r(unique)
+
+** unique schools
+unique med_school if e(sample) == 1
+estadd scalar unique_schools = r(unique)
+
+** number of zeros
+sum tag if e(sample) == 1
+estadd scalar nzero = r(sum)
+
+* column 2 *
+eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM) vce(cluster cohort_id)
+
+** Mean:
+sum all_total_payments if e(sample) == 1
+estadd r(mean)
+
+scalar pct_mean = 100 * _b[c.tuition_bill#1.isEM] / r(mean)
+estadd scalar pct_mean
+
+** Unique doctors
+unique npi if e(sample) == 1
+estadd scalar unique_drs = r(unique)
+
+** unique schools
+unique med_school if e(sample) == 1
+estadd scalar unique_schools = r(unique)
+
+** number of zeros
+sum tag if e(sample) == 1
+estadd scalar nzero = r(sum)
+
+* column 3 *
+eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM hrr#year#isEM) vce(cluster cohort_id)
+
+** Mean:
+sum all_total_payments if e(sample) == 1
+estadd r(mean)
+
+scalar pct_mean = 100 * _b[c.tuition_bill#1.isEM] / r(mean)
+estadd scalar pct_mean
+
+** Unique doctors
+unique npi if e(sample) == 1
+estadd scalar unique_drs = r(unique)
+
+** unique schools
+unique med_school if e(sample) == 1
+estadd scalar unique_schools = r(unique)
+
+** number of zeros
+sum tag if e(sample) == 1
+estadd scalar nzero = r(sum)
+
+* column 4 *
 eststo : reghdfe all_total_payments c.tuition_bill#1.isEM, a(npi#year cohort_id#year#isEM hrr#year#isEM phySpec_id#year#isEM#time_since_grad_id) vce(cluster cohort_id)
 
 ** Mean:

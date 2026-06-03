@@ -1,0 +1,30 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{1}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}         \\
+\hline
+tuition\_bill        &    -0.00417\sym{***}\\
+                    &  (0.000452)         \\
+[1em]
+Cohort-Year FE      &         Yes         \\
+[1em]
+Specialization-Year FE&         Yes         \\
+[1em]
+HRR-Year FE         &         Yes         \\
+[1em]
+Career Time-Year FE &         Yes         \\
+[1em]
+HCPCS Group-Year FE &         Yes         \\
+\hline
+Observations (doctor-years-hcpcsgroup)&   1,795,094         \\
+Doctors             &     120,635         \\
+Clusters            &         249         \\
+Mean                &      14.896         \\
+Coef.\ \% of Mean   &        -0.0         \\
+Zeros               &           6         \\
+\hline\hline
+\multicolumn{2}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{2}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+}

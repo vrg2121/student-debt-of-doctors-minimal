@@ -65,7 +65,7 @@ g tag = 1 if spec_coef == 0
 
 eststo clear 
 
-eststo : reghdfe spec_coef tuition_bill, a(cohort_id year) vce(cluster cohort_id)
+eststo : reghdfe spec_coef tuition_bill, a(cohort_id grad_year) vce(cluster cohort_id)
 
 ** Mean:
 sum spec_coef if e(sample) == 1
@@ -102,7 +102,7 @@ keep if spec_seq == 1
 * regression
 g tag = 1 if spec_coef == 0
 
-eststo : reghdfe spec_coef tuition_bill, a(cohort_id year) vce(cluster cohort_id)
+eststo : reghdfe spec_coef tuition_bill, a(cohort_id grad_year) vce(cluster cohort_id)
 
 ** Mean:
 sum spec_coef if e(sample) == 1
@@ -148,7 +148,7 @@ keep if first_longest_spec == 1
 g tag = 1 if spec_coef == 0
 
 * regression
-eststo : reghdfe spec_coef tuition_bill, a(cohort_id year) vce(cluster cohort_id)
+eststo : reghdfe spec_coef tuition_bill, a(cohort_id grad_year) vce(cluster cohort_id)
 
 ** Mean:
 sum spec_coef if e(sample) == 1
@@ -171,12 +171,12 @@ estadd scalar nzero = r(sum)
 
 
 esttab est*, keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label
-estfe . est*, labels(cohort_id "Cohort FE" year "Year FE")
+estfe . est*, labels(cohort_id "Cohort FE" year "Grad Year FE")
 
 esttab est* using "$tables/fe-regs-specialization-cmspymt.tex", ///
 	drop(_cons) se star(* 0.10 ** 0.05 *** 0.01) label ///
 	indicate(`r(indicate_fe)') ///
-	stats(N unique_drs N_clust /* unique_schools */ mean pct_mean nzero, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1 %9.0fc) labels("Observations (doctor-year)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef. \% of Mean" "Zeros")) ///
+	stats(N unique_drs N_clust /* unique_schools */ mean pct_mean nzero, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1 %9.0fc) labels("Observations (doctor-grad year)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef. \% of Mean" "Zeros")) ///
 	mtitles("One Spec" "First Spec" "Longest Spec") ///
 	replace
 	
