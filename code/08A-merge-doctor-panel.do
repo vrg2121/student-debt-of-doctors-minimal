@@ -8,7 +8,6 @@
 * 	Merges in outcomes from CMS and ProPublica
 
 * 	Merges in AAMC school name using the CMS-AAMC school name key, and then school-level variables
-*		NOTE --- CURRENTLY USES OLD KEY!
 
 * 	Labels variables and makes final selection of calendar years and doctor population (MDs)
 
@@ -37,12 +36,15 @@ drop    _merge
 assert ent_cd != "O"
 
 * Replace missings with zeros based on payment data limits:
+
+/*
 foreach var of global payment_vars {
 	
 	replace `var'_total_payments =  0 ///
 		 if `var'_total_payments == . & inrange(year, 2012, 2019)
 	
 }
+*/
 
 * Average evaluation and management codes (E/M) payments:
 merge 1:1 npi year using "$working_data/temp/em-average-payments"
@@ -56,11 +58,12 @@ merge 1:1 npi year using "$working_data/temp/nCodes-new"
 drop if _merge == 2
 drop    _merge
 
+/*
 ds *nServ *nCode
 foreach var in `r(varlist)' {
 	replace `var' = 0 if `var' == . & inrange(year, 2012, 2019) // added!
 }
-
+*/
 
 *** MERGE IN ProPublica AND MODIFY SOME VARIABLES ***
 
@@ -95,7 +98,7 @@ drop _merge
 
 * Share of count that is from brand name drugs:
 g       pp_brand_per_ben =      brand_claim_count / ben_count if inrange(year, 2013, 2016)
-replace pp_brand_per_ben = 0 if brand_claim_count == . &         inrange(year, 2013, 2016)
+// replace pp_brand_per_ben = 0 if brand_claim_count == . &         inrange(year, 2013, 2016)
 
 rename p_brand     		  pp_p_brand
 rename p_opioid_benes     pp_p_opioid_benes
@@ -125,28 +128,6 @@ g str5 zip5 = substr(zip, 1, 5)
 merge m:1 zip5 using "$dropbox/FullData/zip_hrr"
 drop if _merge == 2
 drop    _merge
-
-
-/*
-
-* REPLACE BELOW WITH NEW KEY WHEN FIXED!
-
-* Merge in AAMC school name using the CMS-AAMC school name key:
-merge m:1 our_med_school using "$working_data/temp/old-important-files/key-our-aamc", keepusing(med_school) // REPLACE!
-drop if _merge == 2
-drop _merge
-
-* Merge in tuition etc:
-g aca_year = grad_year - 1 // graduation year 2001 corresponds to academic year 2000-2001
-
-merge m:1 med_school aca_year using "$working_data/temp/aamc-tuition", ///
-	keepusing(PublicSchool *tuition_bill *_school source)
-drop if _merge == 2
-drop _merge
-
-rename aca_year aca_grad_year
-
-*/
 
 *** LABEL VARIABLES ***
 

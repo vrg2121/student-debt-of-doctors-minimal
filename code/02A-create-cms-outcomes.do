@@ -139,11 +139,14 @@ save "$working_data/temp/fg_selection_appended_hcpcs_code", replace
 
 import delimited "$fang_gong_replication/input/hcpcslist_timed_with_min.csv", clear
 
-keep hcpcs isem
+keep hcpcs isem hcpcsdesc
 
 rename isem isEM
 
 tostring hcpcs, replace
 
+encode hcpcsdesc, gen(hcpcsgroup)
+
 save "$working_data/temp/hcpcs-isEM", replace
+
 

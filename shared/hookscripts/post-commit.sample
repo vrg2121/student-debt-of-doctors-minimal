@@ -1,0 +1,9 @@
+#!/bin/bash
+# Auto-copy .do files to Dropbox after each commit
+
+DROPBOX_CODE="C:\dropbox\Phil Research Dropbox\Victoria Garcia\Student Debt of Doctors (1)\Code\Victoria"
+
+# Copy all .do files
+rsync -av --delete code/ "$DROPBOX_CODE/"
+
+echo "✓ Code synced to Dropbox for collaborators"

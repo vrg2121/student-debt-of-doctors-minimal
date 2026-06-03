@@ -110,49 +110,29 @@ do "$do/06A-create-school-panel.do" // create school panel
 // drops missing data for CA schools
 
 * 07 – Define Large
-do "$do/07A-define-large.do" // define a large change in tuition using AAMC data
+do "$do/07A-define-cohorts.do" // define a large change in tuition using AAMC data
 
 * 08 – Merge outcomes and tuition into the doctor panel:
-do "$do/08A-merge-doctor-panel.do" // changes from key here
+do "$do/08A-merge-doctor-panel.do" // standardized AAMC and CMS names applied here
+// missing previously imputed as zeros here
 
 * 09 – Merge CMS and AAMC Data
 do "$do/09A-cms-aamc-merge.do" // merge AAMC and CMS data based on med school name; analysis of unmatched data 
 do "$do/09B-cohort-reshape.do" // reshape cohort, must be done
 
 * 10 – Regressions without HCPCS
-do "$do/10A-regressions.do" // outputs regression tables
+do "$do/10A-regressions.do" // outputs regression tables for all outcome variables
 
 
-/* HCPCS REGRESSIONS
+* 11 – Regressions by HCPCS Group
+do "$do/11A-hcpcsgroup-regressions.do" // creates doctor-year-hcpcsgroup level data-mangement
+do "$do/11B-hcpcsgroup-regressions.do" // hcpcsgroup level regressions
 
-These files are intended to be run with an M4 or above chip overnight.
-
-Alternatively run as a batch job on a computer with at least 16 CPUs and 60 GB of RAM.
-
-Estimated walltime: 6 hours
-
-Data to be uploaded to cluster: cms_aamc_merge_indentifier.dta
-Data to be downloaded from cluster: cms_aamc_id_hcpcs.dta (160G+)
-Tables to be downloaded from cluster: fe-regs-hcpcs-avg_mdcr_pymt_amt.tex, revamp-fe-regs-hcpcs-avg_mdcr_pymt_amt.tex
-
-Assumed project structure:
-Batch
-|_ data -- upload data here
-	|_ hcpcs -- some data will be placed here
-|_ tables -- tables will be placed here
-*/
-
-/*
-* 11 – Regressions with HCPCS
-global batch 
-do "$do/11A-partition-data.do" // splits data up by year and then 20ths
-do "$do/11B-hcpcs-disaggregation.do" // reshapes data by hcpcs, appends (6ish hours)
-do "$do/11C-hcpcs-regressions.do" // regressions with hcpcs FE
-*/
+* 12 – Regressions by E/M vs Non-E/M Outcomes
 
 
-* 12 – Summary Statistics / Data Exploration
-do "$do/12B-stat-figures.do" // work in progress
+* 13 – Summary Statistics / Data Exploration
+do "$do/13B-stat-figures.do" 
 
 
 

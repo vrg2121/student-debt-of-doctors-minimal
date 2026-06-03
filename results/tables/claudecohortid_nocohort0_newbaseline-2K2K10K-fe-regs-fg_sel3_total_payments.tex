@@ -1,0 +1,30 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{5}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         \\
+\hline
+tuition\_bill        &      -0.805\sym{***}&      -0.803\sym{***}&       0.498         &       0.399         &       0.420         \\
+                    &     (0.152)         &     (0.143)         &     (0.355)         &     (0.302)         &     (0.313)         \\
+[1em]
+Cohort-Year FE      &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         \\
+[1em]
+HRR-Year FE         &          No         &         Yes         &         Yes         &         Yes         &         Yes         \\
+[1em]
+Career-Year FE      &          No         &          No         &         Yes         &         Yes         &          No         \\
+[1em]
+Specialization-Year FE&          No         &          No         &          No         &         Yes         &          No         \\
+[1em]
+Specialization-Career-Year FE&          No         &          No         &          No         &          No         &         Yes         \\
+\hline
+Observations (doctor-years)&     183,864         &     183,603         &     183,603         &     183,548         &     182,674         \\
+Doctors             &      30,585         &      30,548         &      30,548         &      30,541         &      30,438         \\
+Clusters            &         144         &         143         &         143         &         143         &         142         \\
+Mean                &      70.119         &      70.153         &      70.153         &      70.161         &      70.179         \\
+Coef. \% of Mean    &        -1.1         &        -1.1         &         0.7         &         0.6         &         0.6         \\
+Zeroes              &           2         &           2         &           2         &           2         &           2         \\
+\hline\hline
+\multicolumn{6}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{6}{l}{\footnotesize \sym{*} \(p<0.10\), \sym{**} \(p<0.05\), \sym{***} \(p<0.01\)}\\
+\end{tabular}
+}
