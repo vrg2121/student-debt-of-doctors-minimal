@@ -5,13 +5,13 @@ if (-not $dropboxPath) {
     exit 1
 }
 
-"DROPBOX_PATH=$dropboxPath" | Set-Content "dropbox_path.txt" -Encoding utf8
+"DROPBOX_PATH=$dropboxPath/Code" | Set-Content "dropbox_path.txt" -Encoding utf8
 
 $repoPath = (Get-Location).Path
 
 "#! C:/Program\ Files/Git/usr/bin/sh.exe
-robocopy `"$repoPath`\code" `"$dropboxPath`" /MIR /XD .git" | Set-Content .git/hooks/post-commit -Encoding utf8
+robocopy `"$repoPath/code`" `"$dropboxPath/Code/Victoria`" /MIR /XD .git" | Set-Content .git/hooks/post-commit -Encoding utf8
 
 & "C:\Program Files\Git\bin\bash.exe" -c "chmod +x .git/hooks/post-commit"
 
-Write-Host "All done! Commits will now sync to $dropboxPath"
+Write-Host "All done! Code changes will now sync to $dropboxPath/Code/Victoria"

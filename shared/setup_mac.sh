@@ -16,9 +16,9 @@ repo_path=$(pwd)
 
 cat > .git/hooks/post-commit << EOF
 #!/bin/sh
-rsync -av --exclude='.git' "$repo_path/" "$dropbox_path/"
+rsync -av --exclude='.git' "$repo_path/code" "$dropbox_path/Code/Victoria"
 EOF
 
 chmod +x .git/hooks/post-commit
 
-echo "All done! Commits will now sync to $dropbox_path"
+echo "All done! Code changes will now sync to $dropbox_path/Code/Victoria"
