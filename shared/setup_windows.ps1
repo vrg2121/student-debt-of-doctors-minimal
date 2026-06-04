@@ -10,7 +10,7 @@ if (-not $dropboxPath) {
 $repoPath = (Get-Location).Path
 
 "#! C:/Program\ Files/Git/usr/bin/sh.exe
-robocopy `"$repoPath/code`" `"$dropboxPath/Code/Victoria`" /MIR /XD .git" | Set-Content .git/hooks/post-commit -Encoding utf8
+robocopy `"$repoPath\code`" `"$dropboxPath\Code\Victoria`" /MIR /XD .git" | Set-Content .git/hooks/post-commit -Encoding utf8
 
 & "C:\Program Files\Git\bin\bash.exe" -c "chmod +x .git/hooks/post-commit"
 
