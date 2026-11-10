@@ -27,16 +27,16 @@ use "$dropbox/FullData/RawData/characteristics_suplemented", clear
 replace grd_yr = gradYear if grd_yr == .
 
 export delimited ///
-	"$git/data/original/cms-characteristics/extracted/raw-characteristics-2011.csv", ///
+	"$raw_data/cms-characteristics/extracted/raw-characteristics-2011.csv", ///
 	replace
 
 * Emiel's DAC file:
 import delimited ///
-	"$dropbox/FullData/RawData//DAC_Physician_Characteristics.csv", ///
+	"$dropbox/FullData/RawData/DAC_Physician_Characteristics.csv", ///
 	clear varnames(1)
 	
 export delimited ///
-	"$git/data/original/cms-characteristics/extracted/raw-characteristics-2012.csv", ///
+	"$raw_data/cms-characteristics/extracted/raw-characteristics-2012.csv", ///
 	replace
 
 
@@ -67,7 +67,7 @@ foreach section in A-G H-N O-Z {
 }
 
 export delimited ///
-	"$git/data/original/cms-characteristics/extracted/raw-characteristics-2013.csv", ///
+	"$raw_data/cms-characteristics/extracted/raw-characteristics-2013.csv", ///
 	replace
 
 
@@ -79,7 +79,7 @@ export delimited ///
 forvalues n = 2013/2025 {
 
 	import delimited ///
-		"$git/data/original/cms-characteristics/extracted/raw-characteristics-`n'.csv", ///
+		"$raw_data/cms-characteristics/extracted/raw-characteristics-`n'.csv", ///
 		clear varnames(1) stringcols(_all) // rowrange(1:2)
 	
 	* Checks for npi:

@@ -34,7 +34,7 @@ forvalues s = 1(1)9{
 
 coefplot Spread_*, vertical yline(0) keep(tuition_bill) note("Number of Cohorts (Tuition Spread):" "`n_1' ($1K), `n_2' ($2K), `n_3' ($3K), `n_4' ($4K), `n_5' ($5K), `n_6' ($6K), `n_7' ($7K), `n_8' ($8K), `n_9' ($9K)" "Doctor-Year Observations (Tuition Spread):" "`o_1' ($1K), `o_2' ($2K), `o_3' ($3K), `o_4' ($4K), `o_5' ($5K), `o_6' ($6K), `o_7' ($7K), `o_8' ($8K), `o_9' ($9K)" "Cohort-Year FE, HRR-Year FE, Specialization-Career-Year FE") ytitle("Tuition Bill Coefficient" " ")
 
-graph export "$figures/inc_tuition_var_cms_pymt.png", width(975) height(450) replace 
+graph export "$figures/inc_tuition_var_cms_pymt_.png", width(975) height(450) replace 
 
 restore
 

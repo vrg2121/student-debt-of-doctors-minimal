@@ -19,7 +19,7 @@
 
 use "$working_data/temp/cms-panel-raw", clear
 
-keep if isMD == 1 // should imply four years of medical school
+keep if isMD == 1 // should imply four years of medical school & 4 years of residency
 
 * Manually standardize school names within the cms list
 

@@ -42,6 +42,7 @@ bys npi : egen isMD = max(isMD_year)
 drop isMD_year
 
 bys npi year (grad_year) : assert grad_year[1] == grad_year[_N]
+// this becomes random because some report several locations
 bys npi year             : keep if _n == _N // CAREFUL -- BECOMES RANDOM -- ASK EMIEL.
 	// 15,496,345 observations deleted on the basis of what??
 	// keeps only the last observation for each npi-year group, so only one npi per year

@@ -6,13 +6,14 @@ See "Claude Work to Identify Cohorts" folder for details.
 */
 clear all
 global id_strat "2K2K8K"
-import excel "$dropbox/Claude Work to Idenitfy Cohorts/cms-aamc-allmedschoolyears-with-all-cohort-scenarios.xlsx", sheet("2K 2K 8K") cellrange(A1:I2866) firstrow clear
+import excel "$dropbox/Claude/Claude Work to Identify Cohorts/cms-aamc-allmedschoolyears-with-all-cohort-scenarios.xlsx", sheet("2K 2K 8K") cellrange(A1:I2866) firstrow clear
 rename npi npi_count
 
 //drop if Cohort_ID == 0
 
 summarize Cohort_ID
 local max_id = r(max)
+**# Bookmark #1
 
 * Generate a counter for rows where id==0
 generate temp_counter = sum(Cohort_ID == 0)
@@ -45,13 +46,25 @@ global ln_outcome "ln_all_total_payments ln_fg_sel3_total_payments ln_fg_sel5_to
 g ln_tuition = ln(tuition)
 g ln_tuition_bill = ln(tuition_bill)
 
+label variable ln_tuition_bill "Tuition Bill (logs)"
+label variable tuition_bill "Tuition Bill"
+
+label variable all_total_payments "All Total Payments"
+label variable fg_sel3_total_payments "CMS Payments"
+label variable fg_sel5_total_payments "CMS E/M Payments"
+
+label variable ln_all_total_payments "All Total Payments (logs)"
+label variable ln_fg_sel3_total_payments "CMS Payments (logs)"
+label variable ln_fg_sel5_total_payments "CMS E/M Payments (logs)"
 
 ** REGRESSIONS IN LOGS **
 
 // outcomes as elasticities
-/*foreach oc of global ln_outcome {
+foreach oc of global ln_outcome {
+	
+	local oc "ln_fg_sel3_total_payments"
 		
-	g tag = 1 if `oc' == 0
+	g tag = 1 if `oc' == 0 | `oc' == .
 	
 	eststo clear
 	
@@ -171,17 +184,19 @@ g ln_tuition_bill = ln(tuition_bill)
 	* format output
 
 	esttab est*, keep(ln_tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label
-	estfe . est*, labels(Cohort_ID#year "Cohort-Year FE" hrr#year "HRR-Year FE" time_since_grad_id#year "Career-Year FE" phySpec_id#year "Specialization-Year FE" phySpec_id#time_since_grad_id#year "Specialization-Career-Year FE")						
+	estfe . est*, labels(Cohort_ID#year "Cohort-Year FE" hrr#year "HRR-Year FE" time_since_grad_id#year "Career-Year FE" phySpec_id#year "Specialization-Year FE" phySpec_id#time_since_grad_id#year "Specialization-Career-Year FE")					
 		
-	esttab est* using "$tables/claudecohortid_newbaseline-$id_strat-fe-regs-`oc'.tex", ///
+	esttab est* using "$tables/claudecohortid_newbaseline-$id_strat-fe-regs-`oc'.html", ///
 		keep(ln_tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
 		indicate(`r(indicate_fe)') nomtitles ///
 		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean nzero, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1 %9.0fc) labels("Observations (doctor-years)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef. \% of Mean" "Zeroes")) ///
+		title("Effect of Tuition on `: variable label `oc'', $id_strat") ///
+		addnotes("Standard errors clustered at Cohort level") /// 
 		replace
 		
 	drop tag
 }
-*/
+
 
 
 ** REGRESSIONS IN LEVELS **	
@@ -309,10 +324,12 @@ foreach oc of global outcome {
 	esttab est*, keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label
 	estfe . est*, labels(Cohort_ID#year "Cohort-Year FE" hrr#year "HRR-Year FE" time_since_grad_id#year "Career-Year FE" phySpec_id#year "Specialization-Year FE" phySpec_id#time_since_grad_id#year "Specialization-Career-Year FE")						
 		
-	esttab est* using "$tables/claudecohortid_newbaseline-$id_strat-fe-regs-`oc'.tex", ///
+	esttab est* using "$tables/claudecohortid_newbaseline-$id_strat-fe-regs-`oc'.html", ///
 		keep(tuition_bill) se star(* 0.10 ** 0.05 *** 0.01) label ///
 		indicate(`r(indicate_fe)') nomtitles ///
 		stats(N unique_drs N_clust /* unique_schools */ mean pct_mean nzero, fmt(%9.0fc %9.0fc %9.0fc /* %9.0fc */ 3 1 %9.0fc) labels("Observations (doctor-years)" "Doctors" "Clusters" /* "Schools" */ "Mean" "Coef. \% of Mean" "Zeroes")) ///
+		title("Effect of Tuition on `: variable label `oc'', $id_strat") ///
+		addnotes("Standard errors clustered at Cohort level") ///
 		replace
 		
 	drop tag

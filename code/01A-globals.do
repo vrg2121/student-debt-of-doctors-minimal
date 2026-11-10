@@ -171,6 +171,13 @@ program define   inflationAdjust
 	
 end
 
+global npi_invariant ///
+		year phySpec* cred isMD  ///
+		gy_cnt ms_cnt mult_grad_year mult_med_school grad_year med_school ///
+		mdcr_participant zip5 groupPAC event_time hrr ///
+		aca_year tuition PublicSchool source nominal_tuition med_school_chrono ///
+		delta_nominal_tuition nominal_tuition_bill delta_tuition tuition_bill Tuition_quantile
+
 
 *** OLD PROGRAMS ***
 

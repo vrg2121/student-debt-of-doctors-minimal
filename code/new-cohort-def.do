@@ -51,6 +51,7 @@ drop _merge
 
 collapse (count) npi (first) tuition delta_tuition tuition_bill, by(med_school grad_year)
 
+rename npi npi_count
 sort med_school grad_year
 by med_school: gen prev_year = grad_year[_n-1]
 

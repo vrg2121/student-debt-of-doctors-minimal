@@ -16,7 +16,7 @@
 
 
 
-* Fixed file from earlier do-files:
+* Fixed file from earlier 05A:
 use "$working_data/temp/full-aamc-tuition", clear
 
 * Make aca_year integer:
@@ -65,6 +65,91 @@ replace tuition = . if (med_school == "university of washington school of medici
 save "$working_data/temp/pre-aamc-tuition", replace
 
 
+*** COMBINED AAMC/IPEDS PANEL ***
+
+use          "$working_data/temp/pre-aamc-tuition", clear
+// append using "$working_data/temp/pre-ipeds-tuition"
+
+label var aca_year "Academic year (e.g. academic year 2000-2001 -> aca_year = 2000)"
+
+replace tuition = tuition / 1000
+
+* Copy of nominal tuition:
+g nominal_tuition = tuition
+
+* Inflation adjustment for tuition:
+inflationAdjust tuition aca_year
+
+* Check so the data is unique in (school, year):
+bys med_school aca_year : assert _N == 1
+
+order med_school aca_year
+
+* Drop if we only have one observation (cannot calculate increase then):
+bys med_school (aca_year) : g drop = _N == 1
+
+drop if drop == 1
+drop    drop // drops 1 school
+
+drop if tuition == . // drops 85 observations
+assert tuition != .
+
+* Drop if tuition is constantly 0:
+bys med_school (tuition) : g drop = tuition[1] == 0 & tuition[1] == tuition[_N]
+
+drop if drop == 1 // drop 11 observation
+drop    drop
+
+* Mark where chronological order is respected:
+bys med_school (aca_year) : g med_school_chrono = aca_year[_n] == aca_year[_n - 1] + 1 if _n > 1
+
+
+* Delta tuition:
+foreach var in nominal_tuition tuition {
+	
+	bys med_school (aca_year) : g delta_`var' = /// dollar amount
+		`var'[_n] - `var'[_n - 1] if ///
+			med_school_chrono == 1 & /// chronological order is respected
+			`var'[_n - 1]     != 0    // the increase is not from zero	
+			
+	* Total tuition during four years:
+	bys med_school (aca_year) : g `var'_bill = ///
+		`var'[_n - 3] + ///
+		`var'[_n - 2] + ///
+		`var'[_n - 1] + ///
+		`var'[_n - 0] if ///
+			med_school_chrono[_n - 2] == 1 & ///
+			med_school_chrono[_n - 1] == 1 & ///
+			med_school_chrono[_n - 0] == 1
+	
+}
+
+* idenfity unusual gaps in tuition in the raw data
+sum delta_nominal_tuition, detail
+local xtralg = r(p99)
+local xtrasm = r(p1)
+
+g extreme_delta = 1 if delta_nominal_tuition > `xtralg' | delta_nominal_tuition < `xtrasm'
+replace extreme_delta = . if delta_nominal_tuition == .
+
+export delimited "$working_data/temp/nominal_tuition_checks.csv", replace
+
+drop extreme_delta
+
+* Defining tuition quantile:
+egen Tuition_quantile = xtile(tuition), n(4) by(aca_year) // ssc install egenmore
+
+* Label variables:
+label var tuition_bill "Tuition bill (USD 1,000)"
+label var PublicSchool "Public school (Dummy)"
+
+gen grad_year = aca_year + 1
+label var grad_year "Academic Year + 1"
+
+save "$working_data/panels/aamc-tuition", replace
+
+
+**# APPENDIX
 *** IPEDS ***
 
 // forvalues j = 2000/2023 {
@@ -147,88 +232,6 @@ save "$working_data/temp/pre-aamc-tuition", replace
 // g source = "ipeds"
 //
 // save "$working_data/temp/pre-ipeds-tuition", replace
-
-
-*** COMBINED AAMC/IPEDS PANEL ***
-
-use          "$working_data/temp/pre-aamc-tuition", clear
-// append using "$working_data/temp/pre-ipeds-tuition"
-
-label var aca_year "Academic year (e.g. academic year 2000-2001 -> aca_year = 2000)"
-
-replace tuition = tuition / 1000
-
-* Copy of nominal tuition:
-g nominal_tuition = tuition
-
-* Inflation adjustment for tuition:
-inflationAdjust tuition aca_year
-
-* Check so the data is unique in (school, year):
-bys med_school aca_year : assert _N == 1
-
-order med_school aca_year
-
-* Drop if we only have one observation (cannot calculate increase then):
-bys med_school (aca_year) : g drop = _N == 1
-
-drop if drop == 1
-drop    drop // drops 1 school
-
-drop if tuition == . // drops 85 observations
-assert tuition != .
-
-* Drop if tuition is constantly 0:
-bys med_school (tuition) : g drop = tuition[1] == 0 & tuition[1] == tuition[_N]
-
-drop if drop == 1 // drop 11 observation
-drop    drop
-
-* Mark where chronological order is respected:
-bys med_school (aca_year) : g med_school_chrono = aca_year[_n] == aca_year[_n - 1] + 1 if _n > 1
-
-
-* Delta tuition:
-foreach var in nominal_tuition tuition {
-	
-	bys med_school (aca_year) : g delta_`var' = /// dollar amount
-		`var'[_n] - `var'[_n - 1] if ///
-			med_school_chrono == 1 & /// chronological order is respected
-			`var'[_n - 1]     != 0    // the increase is not from zero	
-			
-	* Total tuition during four years:
-	bys med_school (aca_year) : g `var'_bill = ///
-		`var'[_n - 3] + ///
-		`var'[_n - 2] + ///
-		`var'[_n - 1] + ///
-		`var'[_n - 0] if ///
-			med_school_chrono[_n - 2] == 1 & ///
-			med_school_chrono[_n - 1] == 1 & ///
-			med_school_chrono[_n - 0] == 1
-	
-}
-
-* idenfity unusual gaps in tuition in the raw data
-sum delta_nominal_tuition, detail
-local xtralg = r(p99)
-local xtrasm = r(p1)
-
-g extreme_delta = 1 if delta_nominal_tuition > `xtralg' | delta_nominal_tuition < `xtrasm'
-replace extreme_delta = . if delta_nominal_tuition == .
-
-export delimited "$working_data/temp/nominal_tuition_checks.csv", replace
-
-drop extreme_delta
-
-* Defining tuition quantile:
-egen Tuition_quantile = xtile(tuition), n(4) by(aca_year) // ssc install egenmore
-
-* Label variables:
-label var tuition_bill "Tuition bill (USD 1,000)"
-label var PublicSchool "Public school (Dummy)"
-
-save "$working_data/panels/aamc-tuition", replace
-
 
 
 

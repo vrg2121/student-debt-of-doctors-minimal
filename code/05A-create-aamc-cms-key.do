@@ -71,31 +71,7 @@ foreach sheet of local sheets {
 
 rename MedicalSchoolName med_school
 
-g formatted_med_school = med_school // good to save original capitalization
-
-replace med_school = lower(med_school) // same as we did for CMS
-
-replace med_school = subinstr(med_school, " and ", " & ", .) // same for CMS in 05B
-
-drop if regexm(med_school, "^[\s\t]*(note:|© 2025)")
- // drop rows with non-school data
- 
-* Manually standardize school names within the aamc list
-replace med_school =  ///
-	"eastern virginia medical school" if med_school == ///
-	"eastern virginia medical school at old dominion university"
-	
-replace med_school =  ///
-	"texas a&m university college of medicine" if med_school == ///
-	"texas a&m university school of medicine"
-	
-replace med_school =  ///
-	"texas a & m university college of medicine" if med_school == ///
-	"texas a&m university college of medicine"
-	
-replace med_school =  ///
-	"uniformed services university of the health sciences f. edward hebert school of medicine" if med_school == ///
-	"uniformed services university of the health sciences f. edward hebert school of medicine3"
+do "$do/clean-aamc-medschool-names.do"
 
 sort med_school aca_year
 
@@ -106,5 +82,7 @@ keep med_school
 duplicates drop
 
 sort med_school
+drop if med_school == ""
 
 export excel "$working_data/temp/full-aamc-schools.xlsx", replace firstrow(var)
+save "$working_data/temp/full_aamc_schools", replace

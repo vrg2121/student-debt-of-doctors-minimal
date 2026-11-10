@@ -56,6 +56,9 @@ global raw_data ///
 	
 global do ///
 	"$git/code"
+
+global py ///
+	"$git/code/py"
 	
 global tables ///
 	"$git/results/tables"

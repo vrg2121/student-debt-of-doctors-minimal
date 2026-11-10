@@ -20,7 +20,7 @@
 *****************************
 
 forvalues n = 12/19 {
-
+	
 	import delimited "$dropbox/FullData/RawData/MUP_PHY_R19_P04_V10_D`n'_Prov_Svc.csv", clear
 
 	rename rndrng_npi npi
@@ -169,7 +169,7 @@ save "$working_data/temp/emiel-total_payments-fg-hcpcs-codes", replace
 *** YEARLY AVERAGE PAYMENTS PER HCPCS – ONLY FOR E/M CODES ***
 ***************************************************************
 
-* Only for E/M codes currently for computational reasons (bad implementation by Simon)
+* Only for E/M codes currently for computational reasons (bad implementation)
 
 forvalues n = 12/19 {
 

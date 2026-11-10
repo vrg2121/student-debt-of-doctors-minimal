@@ -20,19 +20,21 @@
 
 * Only for E/M codes currently 
 forvalues n = 12/19 {
-	
 	import delimited "$dropbox/FullData/RawData/MUP_PHY_R19_P04_V10_D`n'_Prov_Svc.csv", ///
 		clear
 
 	rename rndrng_npi npi
 	rename hcpcs_cd   hcpcs
 	rename tot_srvcs  nsrvcs
+	capture rename nppes_provider_zip zip
+	capture rename rndrng_prvdr_zip5 zip5
 
 	* Merging on isEM:
 	merge m:1 hcpcs using "$working_data/temp/hcpcs-isEM"
 	drop if _merge == 2
 	drop    _merge
-
+	
+	destring isEM, replace
 	keep if isEM == 1
 	
 	assert hcpcs != ""
@@ -41,7 +43,10 @@ forvalues n = 12/19 {
 	
 	g tot_em_pymt = avg_mdcr_pymt_amt * nsrvcs
 	
-	collapse (sum) tot_em_pymt nsrvcs, by(npi hcpcsgroup)
+	* Creating zip5:
+	g str5 zip_new = substr(zip, 1, 5)
+	
+	collapse (sum) tot_em_pymt nsrvcs (first) zip*, by(npi hcpcsgroup)
 	
 	g avg_mdcr_pymt_amt = tot_em_pymt / nsrvcs
 	
@@ -61,12 +66,22 @@ forvalues n = 12/19 {
 }
 
 ds avg_mdcr_pymt_amt tot_em_pymt
-foreach var in `r(varlist)' {
-	
+foreach var in `r(varlist)' {	
 	* Inflation adjustment:
 	inflationAdjust `var' year
 	
 }
+
+rename zip5 zip_old
+rename zip_new zip5
+
+* Merge in hrr:
+merge m:1 zip5 using "$dropbox/FullData/zip_hrr"
+drop if _merge == 2
+drop    _merge
+drop zip_old zip tag
+
+sort npi year
 
 save "$working_data/temp/em-hcpcsgrp-payments", replace
 
@@ -80,6 +95,8 @@ merge m:1 npi year using "$working_data/temp/cms-panel-clean-name"
 keep if _merge == 3
 drop _merge
 // 3,392,397 / 13,049,142 = keep 26% of em-hcpcsgrp data
+
+// zip code from cms data and hcpcsgrp data don't match :(
 
 save "$working_data/panels/cms-hcpcsgrp-panel", replace
 
