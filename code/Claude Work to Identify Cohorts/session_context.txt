@@ -1,0 +1,160 @@
+CONTEXT FOR CLAUDE — paste this back at the start of a new conversation
+to restore the project state.
+========================================================================
+
+PROJECT
+-------
+Andrew Hertzberg is co-authoring an empirical economics paper studying how
+medical school tuition affects physicians' Medicare billing behavior. The
+paper has access to Medicare billing data for several million doctors,
+including which medical school they attended and what year they graduated.
+A naive regression of billing on tuition would suffer from selection bias
+(schools with different tuition attract systematically different students).
+The identification strategy is to construct cohorts of doctors at the same
+school in nearby graduation years, where the entry-level tuition is
+similar (defending common selection) but the total tuition exposure
+differs (providing identifying variation).
+
+DATA FILE
+---------
+File: cms-aamc-allmedschoolyears.csv (also as .xlsx) — 2,865 rows.
+Columns:
+  med_school    — school name (lowercase, consistent)
+  grad_year     — year of graduation
+  npi           — ignore (used for connecting to other datasets)
+  tuition       — annual tuition in $thousands of 2014 dollars
+                  (inflation-adjusted; that is why the values are not round)
+  delta_tuition — year-over-year change in tuition (calculated)
+  tuition_bill  — sum of tuition over the four years ending in grad_year,
+                  i.e., tuition[g-3] + tuition[g-2] + tuition[g-1] + tuition[g];
+                  null for the first three grad_years of each school
+  prev_year     — lag of grad_year (calculated)
+  skipped_year  — 0/1 dummy: 1 means there is a gap in the underlying
+                  tuition series before this row
+
+UNITS REMINDER: All tuition values are in THOUSANDS of 2014 dollars, so
+37.47 = $37,470. The $2k / $4k / $7k / $10k thresholds below are all in
+those same thousands.
+
+COHORT DEFINITION RULES
+-----------------------
+A cohort is a set of consecutive graduating classes at the same school.
+A cohort must satisfy ALL of the following:
+1. Same school, with grad_years strictly consecutive (no gap years
+   inside the cohort).
+2. Eligibility: every member row must have a non-null tuition_bill AND
+   skipped_year != 1.
+3. Starting tuition (defined as tuition[grad_year - 3], i.e., the tuition
+   the cohort member faced when they entered med school):
+     a. Year-to-year change between consecutive cohort members <= $2k
+        (this becomes redundant when the next cap is also $2k).
+     b. Range across the entire cohort <= $X (currently $2k; previously $4k).
+4. Range of tuition_bill across the entire cohort >= $Y (currently $10k;
+   previously $7k).
+5. Cohort length must be 2, 3, or 4 consecutive grad_years.
+6. Cohorts must be NON-OVERLAPPING (a (school, grad_year) row belongs
+   to at most one cohort).
+
+When multiple candidate cohorts overlap, the chosen subset is selected to:
+  (i)   maximize the number of non-overlapping cohorts;
+  (ii)  break ties in favor of SHORTER cohorts (2 > 3 > 4);
+  (iii) then in favor of LARGER tuition_bill range within the cohort;
+  (iv)  then in favor of cohorts that START EARLIER in time.
+This is implemented as a weighted interval-scheduling DP per school.
+
+OUTPUT: a new column Cohort_ID. Rows in a cohort get integers 1, 2, 3, ...
+counting up. Rows not in any cohort get 0. Numbering increases as you
+move down the spreadsheet (alphabetical by school, then chronological
+within school).
+
+SANDBOX STATUS
+--------------
+Claude's Linux sandbox / Python execution environment has been
+intermittently unavailable in this session, so all code is written into
+the working folder and run by Andrew on his local Windows machine
+(Python 3.12 installed from Microsoft Store).
+
+FILES IN WORKING FOLDER (C:\Users\andrewhertzberg\Documents\Claude Working Folder)
+----------------------------------------------------------------------------------
+INPUT
+  cms-aamc-allmedschoolyears.csv          — original data
+  cms-aamc-allmedschoolyears.xlsx         — same data, xlsx version
+
+GENERATED OUTPUT
+  cms-aamc-allmedschoolyears-with-cohorts.csv
+        — original data + Cohort_ID column, from most recent run
+  cms-aamc-allmedschoolyears-with-all-cohort-scenarios.xlsx
+        — created by Andrew; contains cohort results for 12 parameter
+          combinations: tuition_bill range minimum from $7k to $10k in
+          $1k steps (4 values) crossed with start tuition range cap of
+          $2k, $3k, $4k (3 values). Claude has not yet seen the structure
+          of this file.
+
+SCRIPTS
+  compute_cohorts.py — does the cohort assignment. CONFIG block at the
+        top has all four thresholds. Edit the values, save, re-run.
+  verify_cohorts.py  — picks 10 random cohorts, checks every condition,
+        prints PASS/FAIL per check, plus a global non-overlap check.
+
+RUNNERS (double-click)
+  run.bat            — runs compute_cohorts.py, logs to _run_log.txt
+  verify.bat         — runs verify_cohorts.py, logs to _verify_log.txt
+
+LOGS (regenerated each run)
+  _run_log.txt
+  _verify_log.txt
+
+OTHER
+  Claude Description of Cohort Algorithm.docx
+        — Andrew's Word doc containing two paragraphs of academic-style
+          description of the cohort construction, suitable for an AER-style
+          methods section.
+  __pycache__/      — Python's bytecode cache, can be ignored
+
+CURRENT PARAMETER VALUES (in compute_cohorts.py)
+------------------------------------------------
+  MIN_COHORT_LEN                 = 2
+  MAX_COHORT_LEN                 = 4
+  MAX_YEAR_TO_YEAR_START_CHANGE  = 2.0   # $2k
+  MAX_COHORT_START_RANGE         = 2.0   # $2k
+  MIN_TUITION_BILL_RANGE         = 10.0  # $10k
+
+KEY RESULTS SO FAR
+------------------
+Original parameters ($4k start range cap, $7k bill range floor):
+  400 cohorts across 123 of 140 schools
+  1,199 of 2,865 rows assigned (~42%)
+  Length distribution: 90 two-year, 221 three-year, 89 four-year
+
+Tightened parameters ($2k start range cap, $10k bill range floor):
+  144 cohorts across 102 of 140 schools
+  469 of 2,865 rows assigned (~16%)
+  Length distribution: 13 two-year, 81 three-year, 50 four-year
+
+Verification on 10 random cohorts: all checks PASSED, including the
+global non-overlap check.
+
+NEXT THING ANDREW WANTS TO DO
+-----------------------------
+Build a summary table showing how the two varying dimensions in the
+12-scenario xlsx (start tuition range cap and bill range floor) affect
+(a) the total number of cohorts and (b) the total number of school-year
+observations assigned to a cohort. Claude needs to know how the xlsx
+is structured before writing the script (e.g., one sheet per scenario,
+or 12 Cohort_ID columns side by side, etc.).
+
+CONVENTIONS / WORKING STYLE
+---------------------------
+- Andrew is on a MacBook running Windows in Parallels. Network shares
+  show up as UNC paths (\\Mac\...) and the file-access layer rejects
+  those — so the working folder needs to be a local Windows path
+  (currently C:\Users\andrewhertzberg\Documents\Claude Working Folder).
+- Output should generally be CSV when possible (Andrew can convert to
+  xlsx in Excel) because Claude can't easily author binary xlsx without
+  the sandbox.
+- Whenever the output file is open in Excel, the script's write step
+  fails with a PermissionError. Close the file before re-running.
+- To edit Python files, right-click the .py file and choose
+  "Open with > Notepad" (double-clicking a .py just runs it).
+
+END OF CONTEXT

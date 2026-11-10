@@ -1,0 +1,33 @@
+Summary of cohort scenarios,,,,
+Source file,Cohort Summary - All Cohorts.csv,,,
+Total dataset rows,2865,,,
+,,,,
+TABLE 1: Total number of cohorts,,,,
+Max start tuition range \ Min tuition_bill range,$7k,$8k,$9k,$10k
+$2k,307,248,197,144
+$3k,382,316,265,208
+$4k,400,333,284,237
+,,,,
+TABLE 2: Total school-year observations assigned to a cohort (out of 2865),,,,
+Max start tuition range \ Min tuition_bill range,$7k,$8k,$9k,$10k
+$2k,887,768,626,469
+$3k,1141,996,868,704
+$4k,1199,1050,936,807
+,,,,
+TABLE 3: Share of school-year observations assigned to a cohort,,,,
+Max start tuition range \ Min tuition_bill range,$7k,$8k,$9k,$10k
+$2k,31.00%,26.80%,21.80%,16.40%
+$3k,39.80%,34.80%,30.30%,24.60%
+$4k,41.80%,36.60%,32.70%,28.20%
+,,,,
+TABLE 4: Total doctor-year observations with non-zero cohort,,,,
+Max start tuition range \ Min tuition_bill range,$7k,$8k,$9k,$10k
+$2k,"483,041","414,918","344,356","273,028"
+$3k,"612,546","531,905","472,085","382,826"
+$4k,"649,814","565,403","513,628","444,203"
+,,,,
+OBSERVATIONS,,,,
+1,Both dimensions are doing real work — loosening either the start-range cap or the bill-range floor monotonically increases both cohort count and observation count.,,,
+2,The two dimensions have roughly comparable bite. Moving the start cap from $2k to $4k at any fixed bill floor adds 30–60% more cohorts. Moving the bill floor from $10k to $7k at any fixed start cap adds 70–110% more cohorts. So the bill floor is somewhat more sensitive but they are in the same ballpark.,,,
+3,The strictest cell ($2k start / $10k bill) yields 144 cohorts and 469 observations (~16% of rows). The loosest cell ($4k start / $7k bill) yields 400 cohorts and 1199 observations (~42% of rows). About 2.8x more cohorts and 2.6x more observations between the corners.,,,
+4,Marginal effect of the start cap is roughly constant in absolute terms across bill floors. At $7k bill, going from $2k to $4k start adds 93 cohorts (307 → 400). At $10k bill the same move adds 93 cohorts (144 → 237). In proportional terms this is a much bigger gain at the strict end (+65% vs +30%), consistent with the bill-floor constraint being the tighter binding constraint when both are strict.,

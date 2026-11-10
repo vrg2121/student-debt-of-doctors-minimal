@@ -1,8 +1,6 @@
-****************************
-*** BASELINE REGRESSIONS ***
-****************************
-
-* corresponds with round 10 *
+************************************************************
+*** MERGE SINGLETON AND NONSINGLETON COHORT ID ONTO DATA ***
+************************************************************
 
 **# Identify Singleton Cohorts
 

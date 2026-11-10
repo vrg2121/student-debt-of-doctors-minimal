@@ -1,0 +1,53 @@
+=== Cohort assignment run === 
+Date: Tue 11/03/2026 11:27:05.05 
+ 
+Python 3.14.4
+Requirement already satisfied: pandas in C:\Users\c1vrg01\AppData\Local\Programs\Python\Python314\Lib\site-packages (3.0.3)
+Requirement already satisfied: numpy>=2.3.3 in C:\Users\c1vrg01\AppData\Local\Programs\Python\Python314\Lib\site-packages (from pandas) (2.4.6)
+Requirement already satisfied: python-dateutil>=2.8.2 in C:\Users\c1vrg01\AppData\Roaming\Python\Python314\site-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: tzdata in C:\Users\c1vrg01\AppData\Local\Programs\Python\Python314\Lib\site-packages (from pandas) (2026.2)
+Requirement already satisfied: six>=1.5 in C:\Users\c1vrg01\AppData\Roaming\Python\Python314\site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)
+ 
+--- compute_cohorts.py output --- 
+
+================================================================
+COHORT ASSIGNMENT SUMMARY
+================================================================
+Configuration:
+  Cohort length range:                 2-4 years
+  Max year-to-year start tuition diff: $2.0k
+  Max cohort start tuition range:      $2.0k
+  Min cohort tuition_bill range:       $10.0k
+
+Results:
+  Total cohorts found:        144
+  Rows assigned to a cohort:  469 / 2830
+  Schools with >=1 cohort:    102
+  Schools in dataset:         135
+
+Cohort length distribution:
+  2-year cohorts: 13
+  3-year cohorts: 81
+  4-year cohorts: 50
+
+First 5 cohorts (for spot-checking):
+----------------------------------------------------------------
+  Cohort 1: albany medical college
+    grad_years: [2003, 2004, 2005]
+    tuition_bill: ['181.11', '187.29', '192.54']  (range = 11.43)
+  Cohort 2: albert einstein college of medicine
+    grad_years: [2002, 2003, 2004, 2005]
+    tuition_bill: ['164.33', '167.53', '170.99', '174.87']  (range = 10.54)
+  Cohort 3: boston university aram v chobanian & edward avedisian school of medicine
+    grad_years: [2015, 2016, 2017, 2018]
+    tuition_bill: ['212.37', '215.23', '219.18', '222.73']  (range = 10.36)
+  Cohort 4: brody school of medicine at east carolina university
+    grad_years: [2003, 2004, 2005, 2006]
+    tuition_bill: ['15.23', '18.46', '22.58', '26.04']  (range = 10.82)
+  Cohort 5: case western reserve university school of medicine
+    grad_years: [2009, 2010, 2011, 2012]
+    tuition_bill: ['189.03', '193.37', '198.57', '203.27']  (range = 14.23)
+
+Wrote: cms-aamc-allmedschoolyears-with-cohorts.csv
+ 
+=== Run finished === 

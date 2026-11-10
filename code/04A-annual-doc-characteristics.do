@@ -3,11 +3,9 @@
 *** CREATE YEARLY DOCTOR CHARACTERISTICS FILES ***
 **************************************************
 
-* Description of this do-file:
-
-* 	Translates Emiel's and FG's characteristics files to the same form as those we have downloaded
-* 	Uses the translated and downloaded characterics files to create smaller standardized characteristics files
-*	The final files will be the building blocks for our doctor panel
+* Translates Emiel's and FG's characteristics files to the same form as those we have downloaded
+* Uses the translated and downloaded characterics files to create smaller standardized characteristics files
+* The final files will be the building blocks for our doctor panel
 
 **************************************************
 **************************************************
@@ -20,6 +18,7 @@
 *************************************************
 
 * We will let this be the 2011-2012 files, which might not be correct
+* We do not end up using these files
 
 * Emiel's final characteristics file:
 use "$dropbox/FullData/RawData/characteristics_suplemented", clear

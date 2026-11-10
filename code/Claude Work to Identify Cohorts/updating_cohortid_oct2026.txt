@@ -1,0 +1,41 @@
+Why do we need to recalculate the cohort id?
+	• Both CMS and Tuition Data have cleaner med school name since the last time the cohort id was calculated
+	• The CMS data is cleaned and aggregated more carefully than previously
+
+How was the panel for identifying school cohorts constructed?
+	• We are only interested in a med school from AAMC that has at least one doctor from CMS that graduated from the med school between 1996-2025
+	• We want to look at all data for an AAMC school that are available in the CMS data
+		○ Interested in doctors that have characteristics + billing + aamc
+		○ We want the med schools and npi count for doctors in the aamc-cms-npi year level data
+	• Doctor data with characteristics was cleaned differently
+	• Doctor data with billing was aggregated to an annual level differently
+
+Why do we need a new panel for identifying school cohorts?
+	• Doctor data was re-cleaned and re-aggregated, some schools may still appear, others may not.
+	• You cannot just clean the med-school names from the original cms-aamc-allmedschoolyears.csv, because that panel was built off of incorrectly cleaned cms-aamc crosswalk and the npi counts will be inaccurate since the new disaggregation.
+
+The new method:
+	• Count npi by med school and grad year from the clean, aggregated aamc-cms-npi-year data
+	• Merge onto aamc-tuition data with clean aamc names
+	• Keep schools that appear in aamc-cms-npi data
+	• Calculate 
+
+Victoria's error
+	• aamc-tuition data file had not been cleaned using the most recent aamc cleaning crosswalk
+
+Claude's error
+	• Only cleaned the school names in the deprecated cms-aamc-allmedschoolyears.csv
+
+To check: schools that seemed to have been dropped need to be confirmed as present in the new data.
+
+Med Schools that were dropped in the new merge:
+	• the university of texas health science center at san antonio joe r. & teresa lozano long school of medicine
+	• university of hawaii, john a. burns school of medicine
+	• charles e. schmidt college of medicine at florida atlantic university
+	• robert larner, m.d., college of medicine at the university of vermont
+	• university of miami leonard m. miller school of medicine
+
+V To Do: Figure out why these schools were dropped
+	• What's the magnitude of each missing school?
+	• Were they re-assigned names that no longer show up in aamc data?
+Were they overridden when prioritizing doctor characteristics?

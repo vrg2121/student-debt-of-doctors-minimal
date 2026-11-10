@@ -1,0 +1,141 @@
+=== Cohort verification run === 
+Date: Wed 10/28/2026 17:21:32.26 
+ 
+========================================================================
+VERIFYING 10 RANDOMLY SELECTED COHORTS
+========================================================================
+Active config thresholds:
+  Cohort length range:                 2-4 years
+  Max year-to-year start tuition diff: $1.0k
+  Max cohort start tuition range:      $1.0k
+  Min cohort tuition_bill range:       $10.0k
+
+Cohort 47: west virginia university school of medicine
+  grad_years   : [2002, 2003, 2004, 2005]
+  tuition_bill : ['$49.30k', '$50.93k', '$54.58k', '$60.40k']
+    [PASS] single school  (all rows have med_school = 'west virginia university school of medicine')
+    [PASS] length 2-4 (got 4)
+    [PASS] consecutive grad_years (gaps [1, 1, 1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$12.06k', '$12.27k', '$12.33k', '$12.63k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.21k', '$0.06k', '$0.30k'] (max = $0.30k))
+    [PASS] start tuition range <= $1.0k  (range = $0.57k)
+    [PASS] tuition_bill range >= $10.0k  (range = $11.11k)
+
+Cohort 39: university of south carolina school of medicine columbia
+  grad_years   : [2008, 2009, 2010]
+  tuition_bill : ['$97.65k', '$101.63k', '$107.85k']
+    [PASS] single school  (all rows have med_school = 'university of south carolina school of medicine columbia')
+    [PASS] length 2-4 (got 3)
+    [PASS] consecutive grad_years (gaps [1, 1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$23.48k', '$23.94k', '$24.18k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.46k', '$0.23k'] (max = $0.46k))
+    [PASS] start tuition range <= $1.0k  (range = $0.70k)
+    [PASS] tuition_bill range >= $10.0k  (range = $10.20k)
+
+Cohort 12: meharry medical college
+  grad_years   : [2015, 2016, 2017]
+  tuition_bill : ['$165.20k', '$169.65k', '$176.62k']
+    [PASS] single school  (all rows have med_school = 'meharry medical college')
+    [PASS] length 2-4 (got 3)
+    [PASS] consecutive grad_years (gaps [1, 1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$41.16k', '$42.00k', '$41.34k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.83k', '$0.66k'] (max = $0.83k))
+    [PASS] start tuition range <= $1.0k  (range = $0.83k)
+    [PASS] tuition_bill range >= $10.0k  (range = $11.43k)
+
+Cohort 43: virginia commonwealth university school of medicine
+  grad_years   : [2005, 2006]
+  tuition_bill : ['$79.78k', '$92.46k']
+    [PASS] single school  (all rows have med_school = 'virginia commonwealth university school of medicine')
+    [PASS] length 2-4 (got 2)
+    [PASS] consecutive grad_years (gaps [1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$14.78k', '$15.49k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.71k'] (max = $0.71k))
+    [PASS] start tuition range <= $1.0k  (range = $0.71k)
+    [PASS] tuition_bill range >= $10.0k  (range = $12.68k)
+
+Cohort 31: university of kansas school of medicine
+  grad_years   : [2003, 2004, 2005]
+  tuition_bill : ['$58.49k', '$63.50k', '$70.64k']
+    [PASS] single school  (all rows have med_school = 'university of kansas school of medicine')
+    [PASS] length 2-4 (got 3)
+    [PASS] consecutive grad_years (gaps [1, 1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$13.76k', '$13.97k', '$14.16k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.21k', '$0.19k'] (max = $0.21k))
+    [PASS] start tuition range <= $1.0k  (range = $0.40k)
+    [PASS] tuition_bill range >= $10.0k  (range = $12.15k)
+
+Cohort 1: eastern virginia medical school
+  grad_years   : [2003, 2004, 2005, 2006]
+  tuition_bill : ['$86.00k', '$89.07k', '$92.76k', '$96.56k']
+    [PASS] single school  (all rows have med_school = 'eastern virginia medical school')
+    [PASS] length 2-4 (got 4)
+    [PASS] consecutive grad_years (gaps [1, 1, 1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$21.36k', '$21.48k', '$21.37k', '$21.79k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.12k', '$0.10k', '$0.42k'] (max = $0.42k))
+    [PASS] start tuition range <= $1.0k  (range = $0.44k)
+    [PASS] tuition_bill range >= $10.0k  (range = $10.56k)
+
+Cohort 4: icahn school of medicine at mount sinai
+  grad_years   : [2002, 2003, 2004]
+  tuition_bill : ['$130.95k', '$136.35k', '$144.19k']
+    [PASS] single school  (all rows have med_school = 'icahn school of medicine at mount sinai')
+    [PASS] length 2-4 (got 3)
+    [PASS] consecutive grad_years (gaps [1, 1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$31.92k', '$32.39k', '$32.91k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.47k', '$0.52k'] (max = $0.52k))
+    [PASS] start tuition range <= $1.0k  (range = $0.99k)
+    [PASS] tuition_bill range >= $10.0k  (range = $13.24k)
+
+Cohort 26: universidad central del caribe school of medicine
+  grad_years   : [2015, 2016]
+  tuition_bill : ['$116.39k', '$127.00k']
+    [PASS] single school  (all rows have med_school = 'universidad central del caribe school of medicine')
+    [PASS] length 2-4 (got 2)
+    [PASS] consecutive grad_years (gaps [1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$23.66k', '$23.68k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.02k'] (max = $0.02k))
+    [PASS] start tuition range <= $1.0k  (range = $0.02k)
+    [PASS] tuition_bill range >= $10.0k  (range = $10.62k)
+
+Cohort 21: spencer fox eccles school of medicine at the university of utah
+  grad_years   : [1999, 2000, 2001, 2002]
+  tuition_bill : ['$39.87k', '$43.47k', '$47.51k', '$51.89k']
+    [PASS] single school  (all rows have med_school = 'spencer fox eccles school of medicine at the university of utah')
+    [PASS] length 2-4 (got 4)
+    [PASS] consecutive grad_years (gaps [1, 1, 1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$10.10k', '$9.84k', '$9.91k', '$10.02k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.27k', '$0.07k', '$0.11k'] (max = $0.27k))
+    [PASS] start tuition range <= $1.0k  (range = $0.27k)
+    [PASS] tuition_bill range >= $10.0k  (range = $12.02k)
+
+Cohort 38: university of south carolina school of medicine columbia
+  grad_years   : [2004, 2005]
+  tuition_bill : ['$64.57k', '$75.58k']
+    [PASS] single school  (all rows have med_school = 'university of south carolina school of medicine columbia')
+    [PASS] length 2-4 (got 2)
+    [PASS] consecutive grad_years (gaps [1])
+    [PASS] all rows have tuition_bill non-null and skipped_year != 1
+    [PASS] starting tuition data exists (tuition at grad_year-3)  (start_tuitions = ['$12.47k', '$13.23k'])
+    [PASS] year-to-year start tuition <= $1.0k  (yty diffs = ['$0.75k'] (max = $0.75k))
+    [PASS] start tuition range <= $1.0k  (range = $0.75k)
+    [PASS] tuition_bill range >= $10.0k  (range = $11.01k)
+
+------------------------------------------------------------------------
+Global non-overlap check across all cohorts:
+  [PASS] no two cohorts share a (school, grad_year) row
+
+========================================================================
+OVERALL: ALL CHECKS PASSED
+========================================================================
+ 
+=== Verification finished === 

@@ -3,8 +3,6 @@
 *** FIX NAME ISSUES IN AAMC TUITION FILES ***
 *********************************************
 
-* Description of this do-file:
-
 * 	This file helps preparing to fix some name issues in the AAMC tuition files
 *
 *	The same school sometimes has two different names, for example:

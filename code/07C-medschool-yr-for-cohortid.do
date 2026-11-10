@@ -39,4 +39,4 @@ keep if grad_year < 2019
 
 keep med_school grad_year npi_count tuition delta_tuition tuition_bill skipped_year
 
-export delimited "$working_data/temp/cms-aamc-allmedschoolyears.csv", replace
+export delimited "$git/code/Claude Work to Identify Cohorts/cms-aamc-allmedschoolyears.csv", replace
